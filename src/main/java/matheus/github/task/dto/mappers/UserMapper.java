@@ -7,6 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
 
@@ -28,4 +31,16 @@ public class UserMapper {
      public UserEntity toEntity(UserRDTO userRDTO) {
           return modelMapper.map(userRDTO, UserEntity.class);
      }
+
+     public List<UserRDTO> UserEntityListToRDTO(List<UserEntity> userEntityList) {
+          return userEntityList.stream()
+                  .map(userEntity -> toRDTO(userEntity))
+                  .collect(Collectors.toList());
+     }
+
+     public List<UserEntity> UserDTOListToEntity(List<UserDTO> userDTOList) {
+          return userDTOList.stream().map(userDTO -> toEntity(userDTO))
+                  .collect(Collectors.toList());
+     }
+
 }

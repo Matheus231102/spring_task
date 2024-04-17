@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import matheus.github.task.enums.EnumTaskCategories;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
@@ -33,8 +32,6 @@ public class TaskEntity {
      private EnumTaskStatus status;
 
      private EnumTaskPriority priority;
-
-     private EnumTaskCategories categories;
 
      @ManyToOne
      private UserEntity user;

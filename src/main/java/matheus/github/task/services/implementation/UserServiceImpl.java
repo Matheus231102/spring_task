@@ -4,6 +4,8 @@ import matheus.github.task.dto.UserDTO;
 import matheus.github.task.dto.UserRDTO;
 import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
+import matheus.github.task.exception.exceptions.InvalidUserException;
+import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserServiceInterface {
+
+     public static final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id";
+     public static final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username";
 
      @Autowired
      private UserRepository userRepository;
@@ -39,9 +44,12 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     public UserRDTO getUserById(Long id) {
+     public UserRDTO getUserById(Long id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
-          return user.map(userEntity -> userMapper.toRDTO(userEntity)).orElse(null);
+          if (user.isPresent()) {
+               return userMapper.toRDTO(user.get());
+          }
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID);
      }
 
      @Override
@@ -49,6 +57,8 @@ public class UserServiceImpl implements UserServiceInterface {
      public UserRDTO getUserByUsername(String username) {
           Optional<UserEntity> user = userRepository.findByUsername(username);
           return user.map(userEntity -> userMapper.toRDTO(userEntity)).orElse(null);
+
+
      }
 
      @Override
@@ -59,7 +69,7 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) {
+     public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws InvalidUserException {
           List<UserEntity> userEntityList = userMapper.UserDTOListToEntity(userDTOList);
           userEntityList = userRepository.saveAll(userEntityList);
           return userMapper.UserEntityListToRDTO(userEntityList);

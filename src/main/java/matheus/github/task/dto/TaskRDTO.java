@@ -7,6 +7,8 @@ import lombok.Setter;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,5 +19,6 @@ public class TaskRDTO {
      private String description;
      private EnumTaskStatus status;
      private EnumTaskPriority priority;
+     private LocalDateTime creationDate;
      private UserRDTO user;
 }

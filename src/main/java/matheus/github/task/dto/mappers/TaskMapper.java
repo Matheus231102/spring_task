@@ -7,6 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class TaskMapper {
 
@@ -28,4 +31,16 @@ public class TaskMapper {
      public TaskEntity toEntity(TaskRDTO userRDTO) {
           return modelMapper.map(userRDTO, TaskEntity.class);
      }
+
+     public List<TaskRDTO> taskEntityListToRDTO(List<TaskEntity> taskEntityList) {
+          return taskEntityList.stream()
+                  .map(taskEntity -> toRDTO(taskEntity))
+                  .collect(Collectors.toList());
+     }
+
+     public List<TaskEntity> taskDTOListToEntity(List<TaskDTO> taskDTOList) {
+          return taskDTOList.stream().map(taskDTO -> toEntity(taskDTO))
+                  .collect(Collectors.toList());
+     }
+
 }

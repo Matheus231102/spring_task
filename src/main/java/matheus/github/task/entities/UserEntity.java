@@ -34,4 +34,9 @@ public class UserEntity {
      @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
      private List<TaskEntity> taskList;
 
+     @PrePersist
+     public void setUp() {
+          setCreationDate(LocalDateTime.now());
+     }
+
 }

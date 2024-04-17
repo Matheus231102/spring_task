@@ -11,4 +11,5 @@ public interface UserServiceInterface {
      UserRDTO  getUserById(Long id);
      UserRDTO getUserByUsername(String username);
      List<UserRDTO> getAllUsers();
+     List<UserRDTO> insertUsers(List<UserDTO> userDTOList);
 }

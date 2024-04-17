@@ -29,11 +29,18 @@ public class TaskEntity {
 
      private LocalDateTime creationDate;
 
+     @Enumerated(EnumType.STRING)
      private EnumTaskStatus status;
 
+     @Enumerated(EnumType.STRING)
      private EnumTaskPriority priority;
 
      @ManyToOne
      private UserEntity user;
+
+     @PrePersist
+     public void setUp() {
+          setCreationDate(LocalDateTime.now());
+     }
 
 }

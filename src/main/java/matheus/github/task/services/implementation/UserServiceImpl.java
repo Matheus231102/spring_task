@@ -7,10 +7,12 @@ import matheus.github.task.entities.UserEntity;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserServiceImpl implements UserServiceInterface {
 
      @Autowired
@@ -54,5 +56,12 @@ public class UserServiceImpl implements UserServiceInterface {
           return userRepository.findAll().stream()
                   .map(userEntity -> userMapper.toRDTO(userEntity))
                   .toList();
+     }
+
+     @Override
+     public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) {
+          List<UserEntity> userEntityList = userMapper.UserDTOListToEntity(userDTOList);
+          userEntityList = userRepository.saveAll(userEntityList);
+          return userMapper.UserEntityListToRDTO(userEntityList);
      }
 }

@@ -10,4 +10,5 @@ public interface TaskServiceInterface {
      TaskRDTO removeTaskById(Long id);
      TaskRDTO getTaskById(Long id);
      List<TaskRDTO> getAllTasks();
+     List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList);
 }

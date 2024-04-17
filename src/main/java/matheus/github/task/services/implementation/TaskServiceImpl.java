@@ -7,10 +7,12 @@ import matheus.github.task.entities.TaskEntity;
 import matheus.github.task.repositories.TaskRepository;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class TaskServiceImpl implements TaskServiceInterface {
 
      @Autowired
@@ -48,5 +50,12 @@ public class TaskServiceImpl implements TaskServiceInterface {
           return taskRepository.findAll().stream()
                   .map(taskEntity -> taskMapper.toRDTO(taskEntity))
                   .toList();
+     }
+
+     @Override
+     public List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList) {
+          List<TaskEntity> taskEntityList = taskMapper.taskDTOListToEntity(taskDTOList);
+          taskEntityList = taskRepository.saveAll(taskEntityList);
+          return taskMapper.taskEntityListToRDTO(taskEntityList);
      }
 }

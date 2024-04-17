@@ -4,6 +4,7 @@ import matheus.github.task.dto.TaskDTO;
 import matheus.github.task.dto.TaskRDTO;
 import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.entities.TaskEntity;
+import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.repositories.TaskRepository;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskServiceInterface {
+     public final String TASK_NOT_FOUND_BY_PROVIDED_ID = "Task not found by provided id";
+
 
      @Autowired
      private TaskRepository taskRepository;
@@ -29,21 +32,23 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
-     public TaskRDTO removeTaskById(Long id) {
+     public TaskRDTO removeTaskById(Long id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
           if (task.isPresent()) {
                taskRepository.delete(task.get());
                return taskMapper.toRDTO(task.get());
           }
-          return null;
+          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID);
      }
 
      @Override
-     public TaskRDTO getTaskById(Long id) {
+     public TaskRDTO getTaskById(Long id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
-          return task.map(taskEntity -> taskMapper.toRDTO(taskEntity)).orElse(null);
+          if (task.isPresent()) {
+               return taskMapper.toRDTO(task.get());
+          }
+          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID);
      }
-
 
      @Override
      public List<TaskRDTO> getAllTasks() {

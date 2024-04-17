@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserServiceInterface {
-
      public static final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id";
      public static final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username";
 
@@ -34,13 +33,13 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     public UserRDTO removeUserById(Long id) {
+     public UserRDTO removeUserById(Long id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
                userRepository.delete(user.get());
                return userMapper.toRDTO(user.get());
           }
-          return null;
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID);
      }
 
      @Override
@@ -53,12 +52,12 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     // TODO verificar se método do repository retorna optional
-     public UserRDTO getUserByUsername(String username) {
+     public UserRDTO getUserByUsername(String username) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findByUsername(username);
-          return user.map(userEntity -> userMapper.toRDTO(userEntity)).orElse(null);
-
-
+          if (user.isPresent()) {
+               return userMapper.toRDTO(user.get());
+          }
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_USERNAME);
      }
 
      @Override

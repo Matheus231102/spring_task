@@ -38,12 +38,8 @@ public class UserController {
      }
 
      @PostMapping(path = "/group")
-     public List<UserRDTO> insertUsers(@RequestBody List<UserDTO> userDTOList) {
-          try {
-               return userService.insertUsers(userDTOList);
-          } catch (matheus.github.task.exception.exceptions.InvalidUserException e) {
-               throw new RuntimeException(e);
-          }
+     public List<UserRDTO> insertUsers(@RequestBody List<UserDTO> userDTOList) throws InvalidUserException {
+          return userService.insertUsers(userDTOList);
      }
 
      @DeleteMapping

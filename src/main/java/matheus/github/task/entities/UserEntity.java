@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -32,6 +32,6 @@ public class UserEntity {
      private LocalDateTime creationDate;
 
      @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-     private List<TaskEntity> taskList;
+     private ArrayList<TaskEntity> taskList;
 
 }

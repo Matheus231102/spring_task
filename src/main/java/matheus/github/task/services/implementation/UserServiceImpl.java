@@ -4,8 +4,9 @@ import matheus.github.task.dto.UserDTO;
 import matheus.github.task.dto.UserRDTO;
 import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
-import matheus.github.task.exception.exceptions.InvalidUserException;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
+import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserServiceInterface {
-     public static final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id";
-     public static final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username";
+     public final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id";
+     public final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username";
+     private final String USER_NOT_FOUND_BY_PROVIDED_EMAIL = "User not found by provided e-mail";
 
      @Autowired
      private UserRepository userRepository;
@@ -25,8 +27,13 @@ public class UserServiceImpl implements UserServiceInterface {
      @Autowired
      private UserMapper userMapper;
 
+     @Autowired
+     private UserValidationService userValidation;
+
      @Override
-     public UserRDTO insertUser(UserDTO userDTO) {
+     public UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+          userValidation.validateUsername(userDTO.getUsername());
+          userValidation.validateEmail(userDTO.getEmail());
           UserEntity user = userMapper.toEntity(userDTO);
           user = userRepository.save(user);
           return userMapper.toRDTO(user);
@@ -61,6 +68,15 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
+     public UserRDTO getUserByEmail(String email) throws UserNotFoundException {
+          Optional<UserEntity> user = userRepository.findByEmail(email);
+          if (user.isPresent()) {
+               return userMapper.toRDTO(user.get());
+          }
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_EMAIL);
+     }
+
+     @Override
      public List<UserRDTO> getAllUsers() {
           return userRepository.findAll().stream()
                   .map(userEntity -> userMapper.toRDTO(userEntity))
@@ -68,9 +84,15 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws InvalidUserException {
-          List<UserEntity> userEntityList = userMapper.UserDTOListToEntity(userDTOList);
-          userEntityList = userRepository.saveAll(userEntityList);
-          return userMapper.UserEntityListToRDTO(userEntityList);
+     public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+          for (UserDTO userDTO : userDTOList) {
+               userValidation.validateEmail(userDTO.getEmail());
+               userValidation.validateUsername(userDTO.getUsername());
+          }
+
+          return userDTOList.stream()
+                  .map(userDTO -> userRepository.save(userMapper.toEntity(userDTO)))
+                  .map(userEntity -> userMapper.toRDTO(userEntity))
+                  .toList();
      }
 }

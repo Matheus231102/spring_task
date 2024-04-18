@@ -1,12 +1,12 @@
 package matheus.github.task.controllers;
 
+import jakarta.validation.Valid;
 import matheus.github.task.dto.TaskDTO;
 import matheus.github.task.dto.TaskRDTO;
-import matheus.github.task.exception.exceptions.InvalidTaskException;
-import matheus.github.task.exception.exceptions.InvalidUserException;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,26 +19,31 @@ public class TaskController {
      private TaskServiceInterface taskService;
 
      @GetMapping
+     @ResponseStatus(HttpStatus.OK)
      public TaskRDTO getTaskById(@RequestParam(name = "taskid") Long id) throws TaskNotFoundException {
           return taskService.getTaskById(id);
      }
 
      @GetMapping(path = "/all")
+     @ResponseStatus(HttpStatus.OK)
      public List<TaskRDTO> getAllTasks() {
           return taskService.getAllTasks();
      }
 
      @PostMapping
-     public TaskRDTO insertTask(@RequestBody TaskDTO taskDTO) throws InvalidTaskException {
+     @ResponseStatus(HttpStatus.OK)
+     public TaskRDTO insertTask(@RequestBody @Valid TaskDTO taskDTO) {
           return taskService.insertTask(taskDTO);
      }
 
      @PostMapping(path = "/group")
-     public List<TaskRDTO> insertTasks(@RequestBody List<TaskDTO> taskDTOList) throws InvalidUserException {
+     @ResponseStatus(HttpStatus.CREATED)
+     public List<TaskRDTO> insertTasks(@RequestBody @Valid List<TaskDTO> taskDTOList) {
           return taskService.insertTasks(taskDTOList);
      }
 
      @DeleteMapping
+     @ResponseStatus(HttpStatus.NO_CONTENT)
      public TaskRDTO deleteTaskById(@RequestParam(name = "taskid") Long id) throws TaskNotFoundException {
           return taskService.removeTaskById(id);
      }

@@ -1,4 +1,4 @@
-package matheus.github.task.exception.exceptions.exception_response;
+package matheus.github.task.exception.exception_response;
 
 import lombok.Builder;
 import lombok.Getter;

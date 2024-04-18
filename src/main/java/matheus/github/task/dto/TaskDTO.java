@@ -1,5 +1,7 @@
 package matheus.github.task.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,17 @@ import matheus.github.task.enums.EnumTaskStatus;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskDTO {
+
+     @NotEmpty(message = "title must not be empty")
+     @NotNull(message = "title must not be null")
      private String title;
+
+     @NotNull(message = "description must not be null")
      private String description;
+
+     @NotNull(message = "status must not be null")
      private EnumTaskStatus status;
+
+     @NotNull(message = "priority name must not be null")
      private EnumTaskPriority priority;
 }

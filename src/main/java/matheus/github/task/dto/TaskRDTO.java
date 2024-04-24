@@ -20,5 +20,4 @@ public class TaskRDTO {
      private EnumTaskStatus status;
      private EnumTaskPriority priority;
      private LocalDateTime creationDate;
-     private UserRDTO user;
 }

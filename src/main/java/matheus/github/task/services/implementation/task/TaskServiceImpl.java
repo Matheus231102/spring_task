@@ -1,9 +1,12 @@
-package matheus.github.task.services.implementation;
+package matheus.github.task.services.implementation.task;
 
 import matheus.github.task.dto.TaskDTO;
 import matheus.github.task.dto.TaskRDTO;
 import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.entities.TaskEntity;
+import matheus.github.task.entities.UserEntity;
+import matheus.github.task.enums.EnumTaskPriority;
+import matheus.github.task.enums.EnumTaskStatus;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.repositories.TaskRepository;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskServiceInterface {
@@ -62,5 +66,42 @@ public class TaskServiceImpl implements TaskServiceInterface {
           List<TaskEntity> taskEntityList = taskMapper.taskDTOListToEntity(taskDTOList);
           taskEntityList = taskRepository.saveAll(taskEntityList);
           return taskMapper.taskEntityListToRDTO(taskEntityList);
+     }
+
+
+     @Override
+     public void deleteAllTasksByUser(UserEntity userEntity) {
+          taskRepository.deleteByUser(userEntity);
+     }
+
+     @Override
+     public List<TaskRDTO> getAllTasksByUser(UserEntity userEntity) {
+          List<TaskEntity> taskEntityList = taskRepository.findByUser(userEntity);
+          return taskEntityList.stream()
+                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
+                  .collect(Collectors.toList());
+     }
+
+     @Override
+     public List<TaskRDTO> getAllTasksByUserAndPriority(UserEntity userEntity, EnumTaskPriority enumTaskPriority) {
+          return taskRepository.findByUserAndPriority(userEntity, enumTaskPriority).stream()
+                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
+                  .collect(Collectors.toList());
+     }
+
+     @Override
+     public List<TaskRDTO> insertTaskByUser(UserEntity userEntity, TaskDTO taskDTO) {
+          TaskEntity taskEntity = taskMapper.toEntity(taskDTO);
+          taskEntity.setUser(userEntity);
+          taskRepository.save(taskEntity);
+
+          return taskRepository.findByUser(userEntity).stream()
+                  .map(entity -> taskMapper.toRDTO(entity))
+                  .collect(Collectors.toList());
+     }
+
+     @Override
+     public List<TaskRDTO> getAllTasksByStatusAndPriority(EnumTaskStatus status, EnumTaskPriority priority) {
+          return null;
      }
 }

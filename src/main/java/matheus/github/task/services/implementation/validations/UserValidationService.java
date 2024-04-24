@@ -1,4 +1,4 @@
-package matheus.github.task.services.implementation;
+package matheus.github.task.services.implementation.validations;
 
 import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;

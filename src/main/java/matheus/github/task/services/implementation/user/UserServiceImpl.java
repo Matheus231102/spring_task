@@ -1,4 +1,4 @@
-package matheus.github.task.services.implementation;
+package matheus.github.task.services.implementation.user;
 
 import matheus.github.task.dto.UserDTO;
 import matheus.github.task.dto.UserRDTO;
@@ -8,6 +8,7 @@ import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
+import matheus.github.task.services.implementation.validations.UserValidationService;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

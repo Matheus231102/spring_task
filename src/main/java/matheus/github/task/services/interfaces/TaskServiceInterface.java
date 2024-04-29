@@ -22,5 +22,4 @@ public interface TaskServiceInterface {
      List<TaskRDTO> insertTaskByUser(UserEntity userEntity, TaskDTO taskDTO);
 
      List<TaskRDTO> getAllTasksByStatusAndPriority(EnumTaskStatus status, EnumTaskPriority priority);
-     // use the query by example
 }

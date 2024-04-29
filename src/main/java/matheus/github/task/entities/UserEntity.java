@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import matheus.github.task.enums.EnumRole;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,9 +40,13 @@ public class UserEntity {
      @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
      private List<TaskEntity> taskList;
 
+     @Enumerated(EnumType.STRING)
+     private EnumRole role;
+
      @PrePersist
      public void setUp() {
           setCreationDate(LocalDateTime.now());
+          setRole(EnumRole.USER);
      }
 
 }

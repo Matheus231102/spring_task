@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -14,9 +15,13 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-	   return http.authorizeHttpRequests(
+	   return http
+			 .csrf(csrf -> csrf.disable())
+			 .cors(cors -> cors.disable())
+			 .authorizeHttpRequests(
 			 requests -> requests
-				    .anyRequest().permitAll()
+				    .requestMatchers("/register", "/login").permitAll()
+				    .anyRequest().authenticated()
 			 )
 			 .formLogin(withDefaults())
 			 .httpBasic(withDefaults())
@@ -27,6 +32,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
 	   return new BCryptPasswordEncoder();
     }
-
 
 }

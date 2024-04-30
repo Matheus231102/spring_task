@@ -13,9 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
@@ -33,8 +31,11 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 	   Optional<UserEntity> user = userRepository.findByUsername(username);
 	   if (user.isPresent()) {
 		  if (passwordEncoder.matches(password, user.get().getPassword())) {
+
 			 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-			 authorities.add(new SimpleGrantedAuthority(user.get().getRole().name()));
+			 SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + user.get().getRole().name());
+			 authorities.add(grantedAuthority);
+
 			 return new UsernamePasswordAuthenticationToken(user.get().getUsername(), user.get().getPassword(), authorities);
 		  }
 		  throw new BadCredentialsException("Bad credentials");

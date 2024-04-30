@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,6 +20,9 @@ public class SecurityConfig {
 			 .authorizeHttpRequests(
 			 requests -> requests
 				    .requestMatchers("/register", "/login").permitAll()
+				    .requestMatchers("/api/resource/**").hasAnyRole("ADMIN", "USER", "MANAGER")
+				    .requestMatchers("/api/user/**").hasAnyRole("ADMIN", "MANAGER")
+				    .requestMatchers("/api/task/**").hasAnyRole("ADMIN", "MANAGER")
 				    .anyRequest().authenticated()
 			 )
 			 .formLogin(withDefaults())

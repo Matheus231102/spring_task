@@ -1,5 +1,6 @@
 package matheus.github.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,13 +41,13 @@ public class UserEntity {
      @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
      private List<TaskEntity> taskList;
 
+     @JsonIgnore
      @Enumerated(EnumType.STRING)
      private EnumRole role;
 
      @PrePersist
      public void setUp() {
           setCreationDate(LocalDateTime.now());
-          setRole(EnumRole.USER);
      }
 
 }

@@ -43,10 +43,9 @@ public class LoginServiceImpl implements LoginServiceInterface {
 	   return "";
     }
 
-    public UserDTO encodeUserPassword(UserDTO userDTO) {
+    public void encodeUserPassword(UserDTO userDTO) {
 	   String hashedPassword = passwordEncoder.encode(userDTO.getPassword());
 	   userDTO.setPassword(hashedPassword);
-	   return userDTO;
     }
 
 }

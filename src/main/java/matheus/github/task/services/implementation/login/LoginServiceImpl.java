@@ -12,5 +12,4 @@ public class LoginServiceImpl implements LoginServiceInterface {
 	   return "Testando novamente";
     }
 
-
 }

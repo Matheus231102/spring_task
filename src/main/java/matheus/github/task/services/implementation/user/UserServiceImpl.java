@@ -12,6 +12,7 @@ import matheus.github.task.services.implementation.validations.UserValidationSer
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserServiceInterface {
      private UserValidationService userValidation;
 
      @Override
+     @Transactional
      public UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           userValidation.validateUsername(userDTO.getUsername());
           userValidation.validateEmail(userDTO.getEmail());
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
+     @Transactional
      public UserRDTO removeUserById(Long id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
@@ -85,6 +88,7 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
+     @Transactional
      public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           for (UserDTO userDTO : userDTOList) {
                userValidation.validateEmail(userDTO.getEmail());

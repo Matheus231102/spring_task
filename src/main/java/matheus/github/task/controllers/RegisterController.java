@@ -20,9 +20,6 @@ public class RegisterController {
 
     @PostMapping
     public UserRDTO registerUser(@RequestBody @Valid UserDTO userDTO) {
-	   // criar um token com username, password e chave secreta, define o header
-	   // ou verificar se não vai ser necessário token nesse path
 	   return registerService.registerUser(userDTO);
-
     }
 }

@@ -31,26 +31,31 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
      private UserMapper userMapper;
 
      @Override
-     public List<TaskRDTO> getAllTasksByUserId(Long id) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserById(id);
+     public List<TaskRDTO> getAllTasksByUsername(String username) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
           return taskService.getAllTasksByUser(userMapper.toEntity(userRDTO));
      }
 
      @Override
-     public List<TaskRDTO> getAllTasksByUserIdAndPriority(Long id, EnumTaskPriority enumTaskPriority) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserById(id);
+     public List<TaskRDTO> getAllTasksByUsernameAndPriority(String username, EnumTaskPriority enumTaskPriority) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
           return taskService.getAllTasksByUserAndPriority(userMapper.toEntity(userRDTO), enumTaskPriority);
      }
 
      @Override
-     public void deleteAllTasksByUserId(Long id) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserById(id);
+     public void deleteAllTasksByUsername(String username) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
           taskService.deleteAllTasksByUser(userMapper.toEntity(userRDTO));
      }
 
-     public List<TaskRDTO> insertTaskByUserId(Long id, TaskDTO taskDTO) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserById(id);
+     public List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
           return taskService.insertTaskByUser(userMapper.toEntity(userRDTO), taskDTO);
+     }
+
+     public List<TaskRDTO> getAllTasksByUsernameAndTitleStartingWith(String username, String titleStartsWith) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
+          return taskService.getAllTaskByUserAndTitleStartingWith(userMapper.toEntity(userRDTO), titleStartsWith);
      }
 
 }

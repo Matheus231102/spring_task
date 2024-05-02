@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import matheus.github.task.dto.TaskDTO;
 import matheus.github.task.dto.TaskRDTO;
 import matheus.github.task.enums.EnumTaskPriority;
+import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.services.implementation.ResourceManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,11 @@ public class ResourceController {
           return resourceManager.getAllTasksByUsernameAndTitleStartingWith(principal.toString(), startsWith);
      }
 
+     @DeleteMapping(path = "/tasks/{taskId}")
+     private List<TaskRDTO> deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") Long taskId)
+             throws UserNotFoundException, TaskNotFoundException {
+          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+          return resourceManager.deleteTaskByUsernameAndTaskId(principal.toString(), taskId);
+     }
 
 }

@@ -43,9 +43,9 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
      }
 
      @Override
-     public void deleteAllTasksByUsername(String username) throws UserNotFoundException {
+     public List<TaskRDTO> deleteAllTasksByUsername(String username) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
-          taskService.deleteAllTasksByUser(userMapper.toEntity(userRDTO));
+          return taskService.deleteAllTasksByUser(userMapper.toEntity(userRDTO));
      }
 
      public List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException {
@@ -57,5 +57,12 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
           UserRDTO userRDTO = userService.getUserByUsername(username);
           return taskService.getAllTaskByUserAndTitleStartingWith(userMapper.toEntity(userRDTO), titleStartsWith);
      }
+
+     @Override
+     public List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, Long taskId) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
+          return taskService.deleteByUserAndTaskId(userMapper.toEntity(userRDTO), taskId);
+     }
+
 
 }

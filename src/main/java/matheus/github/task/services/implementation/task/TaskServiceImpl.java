@@ -6,7 +6,6 @@ import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.entities.TaskEntity;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumTaskPriority;
-import matheus.github.task.enums.EnumTaskStatus;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.repositories.TaskRepository;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
@@ -74,8 +73,12 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
      @Override
      @Transactional
-     public void deleteAllTasksByUser(UserEntity userEntity) {
+     public List<TaskRDTO> deleteAllTasksByUser(UserEntity userEntity) {
           taskRepository.deleteAllByUser(userEntity);
+          return taskRepository.findByUser(userEntity)
+                  .stream()
+                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
+                  .toList();
      }
 
      @Override
@@ -115,4 +118,15 @@ public class TaskServiceImpl implements TaskServiceInterface {
                   .map(entity -> taskMapper.toRDTO(entity))
                   .collect(Collectors.toList());
      }
+
+     @Override
+     @Transactional
+     public List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, Long id) {
+          taskRepository.deleteByUserAndId(userEntity, id);
+          return taskRepository.findByUser(userEntity)
+                  .stream()
+                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
+                  .collect(Collectors.toList());
+     }
 }
+

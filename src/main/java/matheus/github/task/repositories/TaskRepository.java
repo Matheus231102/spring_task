@@ -12,7 +12,7 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
     List<TaskEntity> findByUser(UserEntity userEntity);
     void deleteAllByUser(UserEntity userEntity);
+    void deleteByUserAndId(UserEntity userEntity, Long id);
     List<TaskEntity> findByUserAndPriority(UserEntity userEntity, EnumTaskPriority enumTaskPriority);
     List<TaskEntity> findByUserAndTitleStartingWith(UserEntity userEntity, String startsWith);
-    void deleteByTitle(String title);
 }

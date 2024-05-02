@@ -1,25 +1,20 @@
 package matheus.github.task.security;
 
-import matheus.github.task.entities.UserEntity;
-import matheus.github.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
 
 @Component
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -28,19 +23,14 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 	   String username = authentication.getName();
 	   String password = authentication.getCredentials().toString();
-	   Optional<UserEntity> user = userRepository.findByUsername(username);
-	   if (user.isPresent()) {
-		  if (passwordEncoder.matches(password, user.get().getPassword())) {
 
-			 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-			 SimpleGrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + user.get().getRole().name());
-			 authorities.add(grantedAuthority);
+	   UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-			 return new UsernamePasswordAuthenticationToken(user.get().getUsername(), user.get().getPassword(), authorities);
-		  }
-		  throw new BadCredentialsException("Bad credentials");
+	   if (passwordEncoder.matches(password, userDetails.getPassword())) {
+		  return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
 	   }
-	   throw new UsernameNotFoundException("User not found by provided username");
+
+	   throw new BadCredentialsException("Bad credentials");
     }
 
     @Override

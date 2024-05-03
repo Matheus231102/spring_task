@@ -26,16 +26,17 @@ import java.util.stream.Collectors;
 @Component
 public class JwtService {
     private final String SECRET_AUTHENTICATION = "my_secret";
-    private static final String JWT_ISSUER = "task_project";
-    private static final String JWT_USERNAME_CLAIM = "username";
-    private static final String JWT_AUTHORITIES_CLAIM = "authorities";
-    private static final String JWT_ROLE_CLAIM = "role";
+    private final String JWT_ISSUER = "task_project";
+    private final String JWT_USERNAME_CLAIM = "username";
+    private final String JWT_AUTHORITIES_CLAIM = "authorities";
+    private final int HOURS_TO_INCREASE = 8;
+
 
     @Autowired
     private UserRepository userRepository;
 
-    public String getToken(UserDTO userDTO) throws UserNotFoundException {
-	   Optional<UserEntity> user = userRepository.findByUsername(userDTO.getUsername());
+    public String getToken(String username) throws UserNotFoundException {
+	   Optional<UserEntity> user = userRepository.findByUsername(username);
 	   if (user.isPresent()) {
 		  return generateToken(user.get());
 	   }
@@ -48,7 +49,7 @@ public class JwtService {
 				.withIssuer(JWT_ISSUER)
 				.withClaim(JWT_USERNAME_CLAIM, user.getUsername())
 				.withClaim(JWT_AUTHORITIES_CLAIM, authoritiesToList(user.getAuthorities()))
-				.withExpiresAt(generateExpirationDate(8))
+				.withExpiresAt(generateExpirationDate(HOURS_TO_INCREASE))
 				.sign(getAlgorithm());
 
 	   } catch (IllegalArgumentException e) {

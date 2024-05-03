@@ -19,9 +19,9 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserServiceInterface {
-     public final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id";
-     public final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username";
-     private final String USER_NOT_FOUND_BY_PROVIDED_EMAIL = "User not found by provided e-mail";
+     public final String USER_NOT_FOUND_BY_PROVIDED_ID = "User not found by provided id: ";
+     public final String USER_NOT_FOUND_BY_PROVIDED_USERNAME = "User not found by provided username: ";
+     private final String USER_NOT_FOUND_BY_PROVIDED_EMAIL = "User not found by provided e-mail: ";
 
      @Autowired
      private UserRepository userRepository;
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserServiceInterface {
                userRepository.delete(user.get());
                return userMapper.toRDTO(user.get());
           }
-          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID);
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
      @Override
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserServiceInterface {
           if (user.isPresent()) {
                return userMapper.toRDTO(user.get());
           }
-          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID);
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
      @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserServiceInterface {
           if (user.isPresent()) {
                return userMapper.toRDTO(user.get());
           }
-          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_USERNAME);
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_USERNAME + username);
      }
 
      @Override
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserServiceInterface {
           if (user.isPresent()) {
                return userMapper.toRDTO(user.get());
           }
-          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_EMAIL);
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_EMAIL + email);
      }
 
      @Override

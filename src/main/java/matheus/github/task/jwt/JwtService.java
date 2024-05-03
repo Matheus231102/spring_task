@@ -5,30 +5,32 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import matheus.github.task.dto.UserDTO;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 public class JwtService {
-    private final String SECRET_AUTHENTICATION = "my_secret";
-    private final String JWT_ISSUER = "task_project";
-    private final String JWT_USERNAME_CLAIM = "username";
-    private final String JWT_AUTHORITIES_CLAIM = "authorities";
+
+    @Value("${jwt.secret}")
+    private String SECRET_AUTHENTICATION;
+
+    @Value("${jwt.issuer}")
+    private String JWT_ISSUER;
+
+    public static final String JWT_USERNAME_CLAIM = "username";
+    public static final String JWT_AUTHORITIES_CLAIM = "authorities";
     private final int HOURS_TO_INCREASE = 8;
 
 
@@ -48,7 +50,7 @@ public class JwtService {
 		  return JWT.create()
 				.withIssuer(JWT_ISSUER)
 				.withClaim(JWT_USERNAME_CLAIM, user.getUsername())
-				.withClaim(JWT_AUTHORITIES_CLAIM, authoritiesToList(user.getAuthorities()))
+				.withClaim(JWT_AUTHORITIES_CLAIM, authoritiesToStringSeparetedComma(user.getAuthorities()) )
 				.withExpiresAt(generateExpirationDate(HOURS_TO_INCREASE))
 				.sign(getAlgorithm());
 
@@ -59,18 +61,11 @@ public class JwtService {
 	   }
     }
 
-    public List<String> authoritiesToList(Collection<? extends GrantedAuthority> authorities) {
-	   return AuthorityUtils.authorityListToSet(authorities).stream()
-			 .map(grantedAuthority -> grantedAuthority.toString())
-			 .toList();
-    }
-
-    public Collection<? extends GrantedAuthority> listToAuthorities(List<String> authorities) {
+    private String authoritiesToStringSeparetedComma(Collection<? extends GrantedAuthority> authorities) {
 	   return authorities.stream()
-			 .map(authority -> new SimpleGrantedAuthority(authority))
-			 .collect(Collectors.toList());
+			 .map(grantedAuthority -> grantedAuthority.toString())
+			 .collect(Collectors.joining(", "));
     }
-
 
     private Instant generateExpirationDate(int timeInHours) {
 	   return increaseExpirationHour(timeInHours).toInstant(ZoneOffset.of("-03:00"));

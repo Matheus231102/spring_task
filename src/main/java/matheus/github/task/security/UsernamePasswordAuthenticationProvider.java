@@ -27,7 +27,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 	   UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
 	   if (passwordEncoder.matches(password, userDetails.getPassword())) {
-		  return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+		  return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 	   }
 
 	   throw new BadCredentialsException("Bad credentials");

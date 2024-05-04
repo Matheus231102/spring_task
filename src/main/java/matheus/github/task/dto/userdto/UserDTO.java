@@ -1,4 +1,4 @@
-package matheus.github.task.dto;
+package matheus.github.task.dto.userdto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

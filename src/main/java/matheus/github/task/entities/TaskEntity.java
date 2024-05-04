@@ -9,6 +9,7 @@ import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Getter
@@ -20,8 +21,8 @@ import java.time.LocalDateTime;
 public class TaskEntity {
 
      @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long id;
+     @GeneratedValue(strategy = GenerationType.AUTO)
+     private UUID id;
 
      @Column
      private String title;

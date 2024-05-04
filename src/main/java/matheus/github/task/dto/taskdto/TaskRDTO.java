@@ -1,4 +1,4 @@
-package matheus.github.task.dto;
+package matheus.github.task.dto.taskdto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,13 +8,14 @@ import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskRDTO {
-     private Long id;
+     private UUID id;
      private String title;
      private String description;
      private EnumTaskStatus status;

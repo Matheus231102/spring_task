@@ -1,7 +1,7 @@
 package matheus.github.task.services.implementation.register;
 
-import matheus.github.task.dto.UserDTO;
-import matheus.github.task.dto.UserRDTO;
+import matheus.github.task.dto.userdto.UserDTO;
+import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumRole;

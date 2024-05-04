@@ -1,7 +1,7 @@
 package matheus.github.task.dto.mappers;
 
-import matheus.github.task.dto.TaskDTO;
-import matheus.github.task.dto.TaskRDTO;
+import matheus.github.task.dto.taskdto.TaskDTO;
+import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.entities.TaskEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

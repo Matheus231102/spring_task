@@ -1,4 +1,4 @@
-package matheus.github.task.exception.exceptions.data_conflict_exception;
+package matheus.github.task.exception.exceptions;
 
 public class EmailAlreadyExistsException extends Exception {
      public EmailAlreadyExistsException() {

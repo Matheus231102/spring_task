@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,8 +25,8 @@ import java.util.List;
 public class UserEntity implements UserDetails {
 
      @Id
-     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long id;
+     @GeneratedValue(strategy = GenerationType.AUTO)
+     private UUID id;
 
      @Column
      private String name;

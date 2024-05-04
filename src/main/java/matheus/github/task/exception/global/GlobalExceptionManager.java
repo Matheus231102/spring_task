@@ -1,9 +1,9 @@
 package matheus.github.task.exception.global;
 
-import matheus.github.task.exception.exception_response.ExceptionResponse;
+import matheus.github.task.exception.ExceptionResponse;
 import matheus.github.task.exception.exceptions.*;
-import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
+import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

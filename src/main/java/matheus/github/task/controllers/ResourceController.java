@@ -1,8 +1,8 @@
 package matheus.github.task.controllers;
 
 import jakarta.validation.Valid;
-import matheus.github.task.dto.TaskDTO;
-import matheus.github.task.dto.TaskRDTO;
+import matheus.github.task.dto.taskdto.TaskDTO;
+import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/resource")
@@ -51,7 +52,7 @@ public class ResourceController {
      }
 
      @DeleteMapping(path = "/tasks/{taskId}")
-     private List<TaskRDTO> deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") Long taskId)
+     private List<TaskRDTO> deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") UUID taskId)
              throws UserNotFoundException, TaskNotFoundException {
           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
           return resourceManager.deleteTaskByUsernameAndTaskId(principal.toString(), taskId);

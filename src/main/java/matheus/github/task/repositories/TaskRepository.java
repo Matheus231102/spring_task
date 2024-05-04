@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
+public interface TaskRepository extends JpaRepository<TaskEntity, UUID> {
     List<TaskEntity> findByUser(UserEntity userEntity);
     void deleteAllByUser(UserEntity userEntity);
-    void deleteByUserAndId(UserEntity userEntity, Long id);
+    void deleteByUserAndId(UserEntity userEntity, UUID id);
     List<TaskEntity> findByUserAndPriority(UserEntity userEntity, EnumTaskPriority enumTaskPriority);
     List<TaskEntity> findByUserAndTitleStartingWith(UserEntity userEntity, String startsWith);
 }

@@ -1,7 +1,7 @@
 package matheus.github.task.services.implementation.task;
 
-import matheus.github.task.dto.TaskDTO;
-import matheus.github.task.dto.TaskRDTO;
+import matheus.github.task.dto.taskdto.TaskDTO;
+import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.entities.TaskEntity;
 import matheus.github.task.entities.UserEntity;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,7 +38,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
      @Override
      @Transactional
-     public TaskRDTO removeTaskById(Long id) throws TaskNotFoundException {
+     public TaskRDTO removeTaskById(UUID id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
           if (task.isPresent()) {
                taskRepository.delete(task.get());
@@ -47,7 +48,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
-     public TaskRDTO getTaskById(Long id) throws TaskNotFoundException {
+     public TaskRDTO getTaskById(UUID id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
           if (task.isPresent()) {
                return taskMapper.toRDTO(task.get());
@@ -121,7 +122,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
      @Override
      @Transactional
-     public List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, Long id) {
+     public List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, UUID id) {
           taskRepository.deleteByUserAndId(userEntity, id);
           return taskRepository.findByUser(userEntity)
                   .stream()

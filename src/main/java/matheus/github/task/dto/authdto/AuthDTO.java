@@ -1,4 +1,4 @@
-package matheus.github.task.dto;
+package matheus.github.task.dto.authdto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

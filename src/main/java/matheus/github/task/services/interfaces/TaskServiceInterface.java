@@ -1,18 +1,19 @@
 package matheus.github.task.services.interfaces;
 
-import matheus.github.task.dto.TaskDTO;
-import matheus.github.task.dto.TaskRDTO;
+import matheus.github.task.dto.taskdto.TaskDTO;
+import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface TaskServiceInterface {
      TaskRDTO insertTask(TaskDTO taskDTO);
-     TaskRDTO removeTaskById(Long id) throws TaskNotFoundException;
-     TaskRDTO getTaskById(Long id) throws TaskNotFoundException;
+     TaskRDTO removeTaskById(UUID id) throws TaskNotFoundException;
+     TaskRDTO getTaskById(UUID id) throws TaskNotFoundException;
      List<TaskRDTO> getAllTasks();
      List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList);
 
@@ -26,5 +27,5 @@ public interface TaskServiceInterface {
 
      List<TaskRDTO> getAllTaskByUserAndTitleStartingWith(UserEntity userEntity, String startWiths);
 
-     List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, Long id);
+     List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, UUID id);
 }

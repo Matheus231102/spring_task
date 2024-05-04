@@ -1,8 +1,8 @@
 package matheus.github.task.services.implementation;
 
-import matheus.github.task.dto.TaskDTO;
-import matheus.github.task.dto.TaskRDTO;
-import matheus.github.task.dto.UserRDTO;
+import matheus.github.task.dto.taskdto.TaskDTO;
+import matheus.github.task.dto.taskdto.TaskRDTO;
+import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.enums.EnumTaskPriority;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ResourceManagerImpl implements ResouceManagerInterface {
@@ -59,7 +60,7 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
      }
 
      @Override
-     public List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, Long taskId) throws UserNotFoundException {
+     public List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
           return taskService.deleteByUserAndTaskId(userMapper.toEntity(userRDTO), taskId);
      }

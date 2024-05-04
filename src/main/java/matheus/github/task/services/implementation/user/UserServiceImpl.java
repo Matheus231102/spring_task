@@ -1,12 +1,12 @@
 package matheus.github.task.services.implementation.user;
 
-import matheus.github.task.dto.UserDTO;
-import matheus.github.task.dto.UserRDTO;
+import matheus.github.task.dto.userdto.UserDTO;
+import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
+import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.implementation.validations.UserValidationService;
 import matheus.github.task.services.interfaces.UserServiceInterface;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserServiceInterface {
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
      @Override
      @Transactional
-     public UserRDTO removeUserById(Long id) throws UserNotFoundException {
+     public UserRDTO removeUserById(UUID id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
                userRepository.delete(user.get());
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     public UserRDTO getUserById(Long id) throws UserNotFoundException {
+     public UserRDTO getUserById(UUID id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
                return userMapper.toRDTO(user.get());

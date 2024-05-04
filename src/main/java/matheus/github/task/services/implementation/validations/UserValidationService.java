@@ -1,7 +1,7 @@
 package matheus.github.task.services.implementation.validations;
 
-import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
+import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

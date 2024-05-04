@@ -1,17 +1,18 @@
 package matheus.github.task.controllers;
 
 import jakarta.validation.Valid;
-import matheus.github.task.dto.UserDTO;
-import matheus.github.task.dto.UserRDTO;
+import matheus.github.task.dto.userdto.UserDTO;
+import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.EmailAlreadyExistsException;
-import matheus.github.task.exception.exceptions.data_conflict_exception.UsernameAlreadyExistsException;
+import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/user")
@@ -22,7 +23,7 @@ public class UserController {
 
      @GetMapping
      @ResponseStatus(HttpStatus.OK)
-     public UserRDTO getUserById(@RequestParam(name = "userid") Long id) throws UserNotFoundException {
+     public UserRDTO getUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
           return userService.getUserById(id);
      }
 
@@ -59,7 +60,7 @@ public class UserController {
 
      @DeleteMapping
      @ResponseStatus(HttpStatus.NO_CONTENT)
-     public UserRDTO removeUserById(@RequestParam(name = "userid") Long id) throws UserNotFoundException {
+     public UserRDTO removeUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
           return userService.removeUserById(id);
      }
 

@@ -1,7 +1,7 @@
 package matheus.github.task.dto.mappers;
 
-import matheus.github.task.dto.UserDTO;
-import matheus.github.task.dto.UserRDTO;
+import matheus.github.task.dto.userdto.UserDTO;
+import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.entities.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

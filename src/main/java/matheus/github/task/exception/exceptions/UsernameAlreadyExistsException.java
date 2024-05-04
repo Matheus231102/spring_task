@@ -1,4 +1,4 @@
-package matheus.github.task.exception.exceptions.data_conflict_exception;
+package matheus.github.task.exception.exceptions;
 
 public class UsernameAlreadyExistsException extends Exception {
      public UsernameAlreadyExistsException() {

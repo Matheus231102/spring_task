@@ -9,6 +9,7 @@ import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.services.implementation.ResourceManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,47 +23,49 @@ public class ResourceController {
      private ResourceManagerImpl resourceManager;
 
 
+     private String getAuthenticatedUsername() {
+          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+          if (principal instanceof UserDetails) {
+               return ((UserDetails) principal).getUsername();
+          } else {
+               return principal.toString();
+          }
+     }
+
      @GetMapping(path = "/tasks")
      public List<TaskRDTO> getTasksByUser() throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.getAllTasksByUsername(principal.toString());
+          return resourceManager.getAllTasksByUsername(getAuthenticatedUsername());
      }
 
      @GetMapping(path = "/tasks/priority/{priority}")
-     public List<TaskRDTO> getTasksByUserAndPriority(@PathVariable(name = "priority") String priority) throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.getAllTasksByUsernameAndPriority(principal.toString(), EnumTaskPriority.valueOf(priority.toUpperCase()));
+     public List<TaskRDTO> getTasksByUserAndPriority(@PathVariable(name = "priority") EnumTaskPriority priority) throws UserNotFoundException {
+          return resourceManager.getAllTasksByUsernameAndPriority(getAuthenticatedUsername(), priority);
      }
 
      @PostMapping(path = "/tasks")
      public List<TaskRDTO> insertTaskByUser(@RequestBody @Valid TaskDTO taskDTO) throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.insertTaskByUsername(principal.toString(), taskDTO);
+          return resourceManager.insertTaskByUsername(getAuthenticatedUsername(), taskDTO);
      }
 
      @DeleteMapping(path = "/tasks")
      public void deleteTasksByUser() throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          resourceManager.deleteAllTasksByUsername(principal.toString());
+          resourceManager.deleteAllTasksByUsername(getAuthenticatedUsername());
      }
 
      @GetMapping(path = "/tasks/title_starting/{starts}")
      public List<TaskRDTO> getTasksByUserAndTitleStartingWith(@PathVariable(name = "starts") String startsWith) throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.getAllTasksByUsernameAndTitleStartingWith(principal.toString(), startsWith);
+          return resourceManager.getAllTasksByUsernameAndTitleStartingWith(getAuthenticatedUsername() , startsWith);
      }
 
      @DeleteMapping(path = "/tasks/{taskId}")
      public List<TaskRDTO> deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") UUID taskId)
              throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.deleteTaskByUsernameAndTaskId(principal.toString(), taskId);
+          return resourceManager.deleteTaskByUsernameAndTaskId(getAuthenticatedUsername(), taskId);
      }
 
      @GetMapping(path = "/users")
      public UserRDTO getUserInfoByUser() throws UserNotFoundException {
-          Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-          return resourceManager.getUserByUsername(principal.toString());
+          return resourceManager.getUserByUsername(getAuthenticatedUsername());
      }
 
 }

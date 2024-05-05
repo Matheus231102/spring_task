@@ -4,6 +4,7 @@ import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.dto.taskdto.TaskDTO;
 import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
+import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.services.implementation.task.TaskServiceImpl;
@@ -29,41 +30,40 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
 
      @Override
      public List<TaskRDTO> getAllTasksByUsername(String username) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.getAllTasksByUser(userMapper.toEntity(userRDTO));
+          return taskService.getAllTasksByUser(getUserEntity(username));
      }
 
      @Override
      public List<TaskRDTO> getAllTasksByUsernameAndPriority(String username, EnumTaskPriority enumTaskPriority) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.getAllTasksByUserAndPriority(userMapper.toEntity(userRDTO), enumTaskPriority);
+          return taskService.getAllTasksByUserAndPriority(getUserEntity(username), enumTaskPriority);
      }
 
      @Override
      public List<TaskRDTO> deleteAllTasksByUsername(String username) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.deleteAllTasksByUser(userMapper.toEntity(userRDTO));
+          return taskService.deleteAllTasksByUser(getUserEntity(username));
      }
 
      public List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.insertTaskByUser(userMapper.toEntity(userRDTO), taskDTO);
+          return taskService.insertTaskByUser(getUserEntity(username), taskDTO);
      }
 
      public List<TaskRDTO> getAllTasksByUsernameAndTitleStartingWith(String username, String titleStartsWith) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.getAllTaskByUserAndTitleStartingWith(userMapper.toEntity(userRDTO), titleStartsWith);
+          return taskService.getAllTaskByUserAndTitleStartingWith(getUserEntity(username), titleStartsWith);
      }
 
      @Override
      public List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserByUsername(username);
-          return taskService.deleteByUserAndTaskId(userMapper.toEntity(userRDTO), taskId);
+          return taskService.deleteByUserAndTaskId(getUserEntity(username), taskId);
      }
 
      public UserRDTO getUserByUsername(String username) throws UserNotFoundException {
+          return userService.getUserByUsername(username);
+     }
+
+     private UserEntity getUserEntity(String username) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
-          return userRDTO;
+          UserEntity userEntity = userMapper.toEntity(userRDTO);
+          return userEntity;
      }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -43,8 +44,8 @@ public class UserEntity implements UserDetails {
      @Column
      private LocalDateTime creationDate;
 
-     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-     private List<TaskEntity> taskList;
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+     private List<TaskEntity> tasks;
 
      @JsonIgnore
      @Enumerated(EnumType.STRING)
@@ -53,6 +54,7 @@ public class UserEntity implements UserDetails {
      @PrePersist
      public void setUp() {
           setCreationDate(LocalDateTime.now());
+          setTasks(new ArrayList<>());
      }
 
      @Override

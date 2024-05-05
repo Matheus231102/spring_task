@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import matheus.github.task.entities.NotificationEntity;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
@@ -21,4 +22,5 @@ public class TaskRDTO {
      private EnumTaskStatus status;
      private EnumTaskPriority priority;
      private LocalDateTime creationDate;
+     private NotificationEntity taskNotification;
 }

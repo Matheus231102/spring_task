@@ -1,10 +1,9 @@
 package matheus.github.task.services.implementation;
 
+import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.dto.taskdto.TaskDTO;
 import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
-import matheus.github.task.dto.mappers.TaskMapper;
-import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.services.implementation.task.TaskServiceImpl;
@@ -24,9 +23,6 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
 
      @Autowired
      private TaskServiceImpl taskService;
-
-     @Autowired
-     private TaskMapper taskMapper;
 
      @Autowired
      private UserMapper userMapper;
@@ -65,5 +61,9 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
           return taskService.deleteByUserAndTaskId(userMapper.toEntity(userRDTO), taskId);
      }
 
+     public UserRDTO getUserByUsername(String username) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
+          return userRDTO;
+     }
 
 }

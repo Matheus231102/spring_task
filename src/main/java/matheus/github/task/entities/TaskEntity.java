@@ -1,5 +1,6 @@
 package matheus.github.task.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,12 +40,17 @@ public class TaskEntity {
      @Enumerated(EnumType.STRING)
      private EnumTaskPriority priority;
 
+     @JsonIgnore
      @ManyToOne
      private UserEntity user;
 
+     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+     private NotificationEntity taskNotification;
+
      @PrePersist
-     public void setUp() {
+     private void setUp() {
           setCreationDate(LocalDateTime.now());
+          setTaskNotification(NotificationEntity.create());
      }
 
 }

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -13,14 +15,15 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-@Entity(name = "tb_notification")
+@Entity(name = "tb_notifications")
 public class NotificationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String message;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<MessageEntity> messages;
 
     public static NotificationEntity create() {
         return new NotificationEntity();
@@ -28,7 +31,7 @@ public class NotificationEntity {
 
     @PrePersist
     private void setUp() {
-        setMessage("THIS IS THE STANDARD MESSAGE");
+        setMessages(new ArrayList<>());
     }
 
 }

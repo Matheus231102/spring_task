@@ -22,7 +22,6 @@ public class ResourceController {
      @Autowired
      private ResourceManagerImpl resourceManager;
 
-
      private String getAuthenticatedUsername() {
           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
           if (principal instanceof UserDetails) {

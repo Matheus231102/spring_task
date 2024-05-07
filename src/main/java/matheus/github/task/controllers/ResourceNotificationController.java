@@ -24,7 +24,7 @@ public class ResourceNotificationController {
     }
 
     @PostMapping(path = "/notification/{taskId}")
-    public NotificationEntity isnertMessageInNotificationByTaskId(
+    public NotificationEntity insertMessageInNotificationByTaskId(
 		  @PathVariable(name = "taskId") UUID taskId,
 		  @RequestBody @Valid MessageDTO messageDTO ) throws TaskNotFoundException, NullNotificationException {
 	   return notificationService.addMessageByTaskId(messageDTO, taskId);

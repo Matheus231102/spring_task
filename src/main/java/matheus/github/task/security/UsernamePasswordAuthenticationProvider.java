@@ -1,7 +1,7 @@
 package matheus.github.task.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
+public class UsernamePasswordAuthenticationProvider implements AuthenticationManager {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
@@ -33,8 +33,4 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 	   throw new BadCredentialsException("Bad credentials");
     }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-	   return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
-    }
 }

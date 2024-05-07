@@ -2,10 +2,7 @@ package matheus.github.task.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
@@ -17,12 +14,14 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_tasks")
 public class TaskEntity {
 
      @Id
      @GeneratedValue(strategy = GenerationType.AUTO)
+     @EqualsAndHashCode.Include
      private UUID id;
 
      @Column

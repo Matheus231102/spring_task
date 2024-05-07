@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping(path = PathConstants.REGISTER_URI_PATH)
-public class RegisterController {
+    @RestController
+    @RequestMapping(path = PathConstants.REGISTER_URI_PATH)
+    public class RegisterController {
 
-    @Autowired
-    private RegisterServiceImpl registerService;
+        @Autowired
+        private RegisterServiceImpl registerService;
 
-    @PostMapping
-    public UserRDTO registerUser(@RequestBody @Valid UserDTO userDTO) {
-	   return registerService.registerUser(userDTO);
+        @PostMapping
+        public UserRDTO registerUser(@RequestBody @Valid UserDTO userDTO) {
+            return registerService.registerUser(userDTO);
+        }
     }
-}

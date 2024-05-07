@@ -2,10 +2,7 @@ package matheus.github.task.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import matheus.github.task.enums.EnumRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,21 +18,25 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "tb_users")
 public class UserEntity implements UserDetails {
 
      @Id
      @GeneratedValue(strategy = GenerationType.AUTO)
+     @EqualsAndHashCode.Include
      private UUID id;
 
      @Column
      private String name;
 
      @Column(unique = true)
+     @EqualsAndHashCode.Include
      private String username;
 
      @Column(unique = true)
+     @EqualsAndHashCode.Include
      private String email;
 
      @Column

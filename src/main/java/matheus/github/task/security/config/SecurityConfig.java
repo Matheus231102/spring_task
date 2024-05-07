@@ -1,7 +1,6 @@
 package matheus.github.task.security.config;
 
 import matheus.github.task.security.constants.PathConstants;
-import matheus.github.task.security.filters.GenerateJwtFilter;
 import matheus.github.task.security.filters.ValidateJwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +20,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Autowired
-    private GenerateJwtFilter generateJwtFilter;
-
-    @Autowired
     private ValidateJwtFilter validateJwtFilter;
 
     @Bean
@@ -35,12 +31,12 @@ public class SecurityConfig {
 			 .authorizeHttpRequests(
 			 requests -> requests
 				    .requestMatchers(PathConstants.REGISTER_URI_PATH).permitAll()
+				    .requestMatchers(PathConstants.LOGIN_URI_PATH).permitAll()
 				    .requestMatchers(PathConstants.ALL_RESOURCES_URI_PATH).hasAnyRole("ADMIN", "USER", "MANAGER")
 				    .requestMatchers(PathConstants.ALL_USER_URI_PATH).hasAnyRole("ADMIN", "MANAGER")
 				    .requestMatchers(PathConstants.ALL_TASK_URI_PATH).hasAnyRole("ADMIN", "MANAGER")
 				    .anyRequest().authenticated()
 			 )
-			 .addFilterAfter(generateJwtFilter, BasicAuthenticationFilter.class)
 			 .addFilterBefore(validateJwtFilter, BasicAuthenticationFilter.class)
 			 .httpBasic(withDefaults())
 			 .build();

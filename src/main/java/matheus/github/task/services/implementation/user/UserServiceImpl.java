@@ -10,7 +10,10 @@ import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.implementation.validations.UserValidationService;
 import matheus.github.task.services.interfaces.UserServiceInterface;
+import matheus.github.task.utils.EncodeUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,12 +36,17 @@ public class UserServiceImpl implements UserServiceInterface {
      @Autowired
      private UserValidationService userValidation;
 
+     @Autowired
+     private PasswordEncoder passwordEncoder;
+
+     @Autowired
+     private EncodeUtils encodeUtils;
+
      @Override
      @Transactional
      public UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           userValidation.validateUsername(userDTO.getUsername());
           userValidation.validateEmail(userDTO.getEmail());
-
           UserEntity user = userMapper.toEntity(userDTO);
           user = userRepository.save(user);
           return userMapper.toRDTO(user);
@@ -102,4 +110,22 @@ public class UserServiceImpl implements UserServiceInterface {
                   .map(userEntity -> userMapper.toRDTO(userEntity))
                   .toList();
      }
+
+     @Override
+     @Transactional
+     public UserRDTO updateUserById(UUID id, UserDTO userDTO) throws UserNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException {
+          Optional<UserEntity> user = userRepository.findById(id);
+          if (user.isPresent()) {
+               userValidation.validateEmail(userDTO.getEmail());
+               userValidation.validateUsername(userDTO.getUsername());
+               encodeUtils.encodeUserPassword(userDTO);
+               BeanUtils.copyProperties(userDTO, user.get());
+               UserEntity userEntity = userRepository.save(user.get());
+               return userMapper.toRDTO(userEntity);
+          }
+          throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID + id);
+     }
+
+
+
 }

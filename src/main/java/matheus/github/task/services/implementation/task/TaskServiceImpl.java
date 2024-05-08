@@ -38,13 +38,21 @@ public class TaskServiceImpl implements TaskServiceInterface {
 
      @Override
      @Transactional
+     public List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList) {
+          List<TaskEntity> taskEntityList = taskMapper.taskDTOListToEntity(taskDTOList);
+          taskEntityList = taskRepository.saveAll(taskEntityList);
+          return taskMapper.taskEntityListToRDTO(taskEntityList);
+     }
+
+     @Override
+     @Transactional
      public TaskRDTO removeTaskById(UUID id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
           if (task.isPresent()) {
                taskRepository.delete(task.get());
                return taskMapper.toRDTO(task.get());
           }
-          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID);
+          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
      @Override
@@ -53,7 +61,7 @@ public class TaskServiceImpl implements TaskServiceInterface {
           if (task.isPresent()) {
                return taskMapper.toRDTO(task.get());
           }
-          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID);
+          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
      @Override
@@ -63,14 +71,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
                   .map(taskEntity -> taskMapper.toRDTO(taskEntity))
                   .toList();
      }
-
-     @Override
-     public List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList) {
-          List<TaskEntity> taskEntityList = taskMapper.taskDTOListToEntity(taskDTOList);
-          taskEntityList = taskRepository.saveAll(taskEntityList);
-          return taskMapper.taskEntityListToRDTO(taskEntityList);
-     }
-
 
      @Override
      @Transactional

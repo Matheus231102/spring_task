@@ -14,13 +14,13 @@ public class UserValidationService {
 
      public void validateUsername(String username) throws UsernameAlreadyExistsException {
           if (userRepository.existsByUsername(username)) {
-               throw new UsernameAlreadyExistsException("There is already a user with the given username");
+               throw new UsernameAlreadyExistsException("There is already a user with the given username: " + username);
           }
      }
 
      public void validateEmail(String email) throws EmailAlreadyExistsException {
           if (userRepository.existsByEmail(email)) {
-               throw new EmailAlreadyExistsException("There is already a user with the given e-mail");
+               throw new EmailAlreadyExistsException("There is already a user with the given e-mail: " + email);
           }
      }
 }

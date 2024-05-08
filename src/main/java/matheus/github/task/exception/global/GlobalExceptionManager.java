@@ -4,13 +4,13 @@ import matheus.github.task.exception.ExceptionResponse;
 import matheus.github.task.exception.exceptions.*;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -97,12 +97,23 @@ public class GlobalExceptionManager {
           ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.BAD_REQUEST.value())
-                  .error(INVALID_ARGUMENT)
+                  .error(exception.getErrorCode())
                   .message(exception.getMessage())
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
      }
 
+     @ExceptionHandler(NoHandlerFoundException.class)
+     public ResponseEntity handleNoHandlerFoundException(NoHandlerFoundException exception) {
+          ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                  .timestamp(LocalDateTime.now())
+                  .status(HttpStatus.BAD_REQUEST.value())
+                  .error(exception.getTitleMessageCode())
+                  .message(exception.getMessage())
+                  .build();
+
+          return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+     }
 
 }

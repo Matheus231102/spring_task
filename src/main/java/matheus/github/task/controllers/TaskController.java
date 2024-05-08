@@ -8,6 +8,7 @@ import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,34 +21,47 @@ public class TaskController {
      @Autowired
      private TaskServiceInterface taskService;
 
-     @GetMapping
-     @ResponseStatus(HttpStatus.OK)
-     public TaskRDTO getTaskById(@RequestParam(name = "taskid") UUID id) throws TaskNotFoundException {
-          return taskService.getTaskById(id);
+     @GetMapping("/{taskid}")
+     public ResponseEntity<TaskRDTO> getTaskById(@PathVariable(name = "taskid") UUID id) throws TaskNotFoundException {
+          TaskRDTO taskRDTO = taskService.getTaskById(id);
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(taskRDTO);
      }
 
+     //TODO implementar atualização de recurso
+     //TODO verificar como tratar exceções de entrada de dados no Spring Boot
+     // /all3 está devolvendo "message": "Failed to convert value of type 'java.lang.String' to required type 'java.util.UUID'; Invalid UUID string: all2"
      @GetMapping("/all")
-     @ResponseStatus(HttpStatus.OK)
-     public List<TaskRDTO> getAllTasks() {
-          return taskService.getAllTasks();
+     public ResponseEntity<List<TaskRDTO>> getAllTasks() {
+          List<TaskRDTO> taskRDTOList = taskService.getAllTasks();
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(taskRDTOList);
      }
 
      @PostMapping
-     @ResponseStatus(HttpStatus.OK)
-     public TaskRDTO insertTask(@RequestBody @Valid TaskDTO taskDTO) {
-          return taskService.insertTask(taskDTO);
+     public ResponseEntity<TaskRDTO> insertTask(@RequestBody @Valid TaskDTO taskDTO) {
+          TaskRDTO taskRDTO = taskService.insertTask(taskDTO);
+          return ResponseEntity
+                  .status(HttpStatus.CREATED)
+                  .body(taskRDTO);
      }
 
      @PostMapping("/group")
-     @ResponseStatus(HttpStatus.CREATED)
-     public List<TaskRDTO> insertTasks(@RequestBody @Valid List<TaskDTO> taskDTOList) {
-          return taskService.insertTasks(taskDTOList);
+     public ResponseEntity<List<TaskRDTO>> insertTasks(@RequestBody @Valid List<TaskDTO> taskDTOList) {
+          List<TaskRDTO> taskRDTOList = taskService.insertTasks(taskDTOList);
+          return ResponseEntity
+                  .status(HttpStatus.CREATED)
+                  .body(taskRDTOList);
      }
 
-     @DeleteMapping
-     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public TaskRDTO deleteTaskById(@RequestParam(name = "taskid") UUID id) throws TaskNotFoundException {
-          return taskService.removeTaskById(id);
+     @DeleteMapping("/{taskid}")
+     public ResponseEntity deleteTaskById(@PathVariable(name = "taskid") UUID id) throws TaskNotFoundException {
+          taskService.removeTaskById(id);
+          return ResponseEntity
+                  .status(HttpStatus.NO_CONTENT)
+                  .build();
      }
 
 }

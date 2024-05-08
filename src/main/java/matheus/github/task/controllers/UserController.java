@@ -3,6 +3,7 @@ package matheus.github.task.controllers;
 import jakarta.validation.Valid;
 import matheus.github.task.dto.userdto.UserDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
+import matheus.github.task.entities.UserEntity;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
@@ -27,33 +28,25 @@ public class UserController {
      @GetMapping("/{userid}")
      public ResponseEntity<UserRDTO> getUserById(@PathVariable(name = "userid") UUID id) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserById(id);
-          return ResponseEntity
-                  .status(HttpStatus.OK)
-                  .body(userRDTO);
+          return ResponseEntity.ok(userRDTO);
      }
 
      //TODO verificar o por que do retorno de 401 em path errados
      @GetMapping("/username/{username}")
      public ResponseEntity<UserRDTO> getUserByUsername(@PathVariable(name = "username") String username) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
-          return ResponseEntity
-                  .status(HttpStatus.OK)
-                  .body(userRDTO);
+          return ResponseEntity.ok(userRDTO);
      }
 
      @GetMapping("/email/{email}")
      public ResponseEntity<UserRDTO> getUserByEmail(@PathVariable(name = "email") String email) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByEmail(email);
-          return ResponseEntity
-                  .status(HttpStatus.OK)
-                  .body(userRDTO);
+          return ResponseEntity.ok(userRDTO);
      }
 
      @GetMapping("/all")
      public ResponseEntity<List<UserRDTO>> getAllUsers() {
-          return ResponseEntity
-                  .status(HttpStatus.OK)
-                  .body(userService.getAllUsers());
+          return ResponseEntity.ok(userService.getAllUsers());
      }
 
      @PostMapping
@@ -64,6 +57,7 @@ public class UserController {
                   .body(userRDTO);
      }
 
+     //TODO deixar insertUser como método único como para inclusão de usuários
      @PostMapping("/group")
      public ResponseEntity<List<UserRDTO>> insertUsers(@RequestBody @Valid List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           List<UserRDTO> usersRDTO = userService.insertUsers(userDTOList);
@@ -72,12 +66,19 @@ public class UserController {
                   .body(usersRDTO);
      }
 
-     @DeleteMapping
+     @DeleteMapping("/{userid}")
      public ResponseEntity removeUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
           userService.removeUserById(id);
-          return ResponseEntity
-                  .status(HttpStatus.NO_CONTENT)
-                  .build();
+          return ResponseEntity.noContent().build();
+     }
+
+
+     //TODO implementar atualização de recurso
+     @PutMapping("/{userid}")
+     private ResponseEntity<UserRDTO> updateUserById(@PathVariable(name = "userid") UUID id,
+                                                     @RequestBody @Valid UserDTO userDTO) throws UserNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
+          UserRDTO userRDTO = userService.updateUserById(id, userDTO);
+          return ResponseEntity.ok(userRDTO);
      }
 
 }

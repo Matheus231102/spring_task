@@ -7,6 +7,7 @@ import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumRole;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.interfaces.RegisterServiceInterface;
+import matheus.github.task.utils.EncodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,23 +19,17 @@ public class RegisterServiceImpl implements RegisterServiceInterface {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserMapper userMapper;
 
     @Autowired
-    private UserMapper userMapper;
+    private EncodeUtils encodeUtils;
 
     @Override
     public UserRDTO registerUser(UserDTO userDTO) {
 	   UserEntity userEntity = userMapper.toEntity(userDTO);
-	   encodeUserPassword(userEntity);
-	   setDefaultUserRole(userEntity);
+	   encodeUtils.encodeUserPassword(userEntity);
 	   userRepository.save(userEntity);
 	   return userMapper.toRDTO(userEntity);
-    }
-
-    public void encodeUserPassword(UserEntity userEntity) {
-	   String hashedPassword = passwordEncoder.encode(userEntity.getPassword());
-	   userEntity.setPassword(hashedPassword);
     }
 
     public void setDefaultUserRole(UserEntity userEntity) {

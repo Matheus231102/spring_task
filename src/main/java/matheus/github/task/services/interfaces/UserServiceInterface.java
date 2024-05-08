@@ -17,4 +17,5 @@ public interface UserServiceInterface {
      UserRDTO getUserByUsername(String username) throws UserNotFoundException;
      UserRDTO getUserByEmail(String username) throws UserNotFoundException;
      List<UserRDTO> getAllUsers();
+     UserRDTO updateUserById(UUID id, UserDTO userDTO) throws UserNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException;
 }

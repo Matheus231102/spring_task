@@ -55,6 +55,7 @@ public class UserEntity implements UserDetails {
      @PrePersist
      public void setUp() {
           setCreationDate(LocalDateTime.now());
+          setRole(EnumRole.USER);
           setTasks(new ArrayList<>());
      }
 

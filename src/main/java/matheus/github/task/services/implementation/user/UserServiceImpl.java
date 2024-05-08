@@ -1,11 +1,11 @@
 package matheus.github.task.services.implementation.user;
 
+import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.dto.userdto.UserDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
-import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
-import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.implementation.validations.UserValidationService;
@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserServiceInterface {
           }
 
           return userDTOList.stream()
+                  .peek(userDTO -> encodeUtils.encodeUserPassword(userDTO))
                   .map(userDTO -> userRepository.save(userMapper.toEntity(userDTO)))
                   .map(userEntity -> userMapper.toRDTO(userEntity))
                   .toList();

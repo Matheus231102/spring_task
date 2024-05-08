@@ -1,8 +1,9 @@
 package matheus.github.task.exception.global;
 
 import matheus.github.task.exception.ExceptionResponse;
-import matheus.github.task.exception.exceptions.*;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.TaskNotFoundException;
+import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionManager {
-     private final String INVALID_ARGUMENT = "Invalid argument";
      private final String FIELD_NOT_VALID_ERROR = "A field sent was wrong";
      private final String EMAIL_ALREADY_EXISTS = "E-mail already exists.";
      private final String USERNAME_ALREADY_EXISTS = "Username already exists.";

@@ -3,11 +3,9 @@ package matheus.github.task.controllers;
 import jakarta.validation.Valid;
 import matheus.github.task.dto.userdto.UserDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
-import matheus.github.task.entities.UserEntity;
-import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
-import matheus.github.task.security.config.SecurityConfig;
 import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,15 +48,6 @@ public class UserController {
      }
 
      @PostMapping
-     public ResponseEntity<UserRDTO> insertUser(@RequestBody @Valid UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
-          UserRDTO userRDTO = userService.insertUser(userDTO);
-          return ResponseEntity
-                  .status(HttpStatus.CREATED)
-                  .body(userRDTO);
-     }
-
-     //TODO deixar insertUser como método único como para inclusão de usuários
-     @PostMapping("/group")
      public ResponseEntity<List<UserRDTO>> insertUsers(@RequestBody @Valid List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           List<UserRDTO> usersRDTO = userService.insertUsers(userDTOList);
           return ResponseEntity
@@ -72,8 +61,6 @@ public class UserController {
           return ResponseEntity.noContent().build();
      }
 
-
-     //TODO implementar atualização de recurso
      @PutMapping("/{userid}")
      private ResponseEntity<UserRDTO> updateUserById(@PathVariable(name = "userid") UUID id,
                                                      @RequestBody @Valid UserDTO userDTO) throws UserNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {

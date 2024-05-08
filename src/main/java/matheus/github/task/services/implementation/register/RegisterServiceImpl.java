@@ -1,15 +1,14 @@
 package matheus.github.task.services.implementation.register;
 
+import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.dto.userdto.UserDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
-import matheus.github.task.dto.mappers.UserMapper;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.enums.EnumRole;
 import matheus.github.task.repositories.UserRepository;
 import matheus.github.task.services.interfaces.RegisterServiceInterface;
 import matheus.github.task.utils.EncodeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -6,62 +6,78 @@ import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
+import matheus.github.task.security.config.SecurityConfig;
+import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/user")
+@RequestMapping(PathConstants.DEFAULT_USERS_PATH)
 public class UserController {
 
      @Autowired
      private UserServiceInterface userService;
 
-     @GetMapping
-     @ResponseStatus(HttpStatus.OK)
-     public UserRDTO getUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
-          return userService.getUserById(id);
+     @GetMapping("/{userid}")
+     public ResponseEntity<UserRDTO> getUserById(@PathVariable(name = "userid") UUID id) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserById(id);
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(userRDTO);
      }
 
-     @GetMapping(path = "/username/{username}")
-     @ResponseStatus(HttpStatus.OK)
-     public UserRDTO getUserByUsername(@PathVariable(name = "username") String username) throws UserNotFoundException {
-          return userService.getUserByUsername(username);
+     //TODO verificar o por que do retorno de 401 em path errados
+     @GetMapping("/username/{username}")
+     public ResponseEntity<UserRDTO> getUserByUsername(@PathVariable(name = "username") String username) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByUsername(username);
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(userRDTO);
      }
 
-
-     @GetMapping(path = "/email/{email}")
-     @ResponseStatus(HttpStatus.OK)
-     public UserRDTO getUserByEmail(@PathVariable(name = "email") String email) throws UserNotFoundException {
-          return userService.getUserByEmail(email);
+     @GetMapping("/email/{email}")
+     public ResponseEntity<UserRDTO> getUserByEmail(@PathVariable(name = "email") String email) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserByEmail(email);
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(userRDTO);
      }
 
-     @GetMapping(path = "/all")
-     @ResponseStatus(HttpStatus.OK)
-     public List<UserRDTO> getAllUsers() {
-          return userService.getAllUsers();
+     @GetMapping("/all")
+     public ResponseEntity<List<UserRDTO>> getAllUsers() {
+          return ResponseEntity
+                  .status(HttpStatus.OK)
+                  .body(userService.getAllUsers());
      }
 
      @PostMapping
-     @ResponseStatus(HttpStatus.CREATED)
-     public UserRDTO insertUser(@RequestBody @Valid UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
-          return userService.insertUser(userDTO);
+     public ResponseEntity<UserRDTO> insertUser(@RequestBody @Valid UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+          UserRDTO userRDTO = userService.insertUser(userDTO);
+          return ResponseEntity
+                  .status(HttpStatus.CREATED)
+                  .body(userRDTO);
      }
 
-     @PostMapping(path = "/group")
-     @ResponseStatus(HttpStatus.CREATED)
-     public List<UserRDTO> insertUsers(@RequestBody @Valid List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
-          return userService.insertUsers(userDTOList);
+     @PostMapping("/group")
+     public ResponseEntity<List<UserRDTO>> insertUsers(@RequestBody @Valid List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+          List<UserRDTO> usersRDTO = userService.insertUsers(userDTOList);
+          return ResponseEntity
+                  .status(HttpStatus.CREATED)
+                  .body(usersRDTO);
      }
 
      @DeleteMapping
-     @ResponseStatus(HttpStatus.NO_CONTENT)
-     public UserRDTO removeUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
-          return userService.removeUserById(id);
+     public ResponseEntity removeUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
+          userService.removeUserById(id);
+          return ResponseEntity
+                  .status(HttpStatus.NO_CONTENT)
+                  .build();
      }
 
 }

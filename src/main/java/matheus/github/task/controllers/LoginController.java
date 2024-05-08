@@ -6,6 +6,7 @@ import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.jwt.JwtService;
 import matheus.github.task.security.constants.PathConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,9 +37,18 @@ public class LoginController {
 
             String token = jwtService.getToken(authenticated.getName());
 
-            return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).build();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .header(HttpHeaders.AUTHORIZATION, token)
+                    .build();
+
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            String InvalidCredentialsMessage = "Invalid credentials";
+
+            //TODO não seria melhor enviar um Response personalizado no body para cada erro ?
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(InvalidCredentialsMessage);
         }
     }
 

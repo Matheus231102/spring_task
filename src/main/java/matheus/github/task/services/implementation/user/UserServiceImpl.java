@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserServiceInterface {
      public UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           userValidation.validateUsername(userDTO.getUsername());
           userValidation.validateEmail(userDTO.getEmail());
+
           UserEntity user = userMapper.toEntity(userDTO);
           user = userRepository.save(user);
           return userMapper.toRDTO(user);
@@ -45,11 +46,11 @@ public class UserServiceImpl implements UserServiceInterface {
 
      @Override
      @Transactional
-     public UserRDTO removeUserById(UUID id) throws UserNotFoundException {
+     public void removeUserById(UUID id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
                userRepository.delete(user.get());
-               return userMapper.toRDTO(user.get());
+               return;
           }
           throw new UserNotFoundException(USER_NOT_FOUND_BY_PROVIDED_ID + id);
      }

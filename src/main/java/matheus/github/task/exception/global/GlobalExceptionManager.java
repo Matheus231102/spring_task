@@ -4,17 +4,20 @@ import matheus.github.task.exception.ExceptionResponse;
 import matheus.github.task.exception.exceptions.*;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionManager {
+     private final String INVALID_ARGUMENT = "Invalid argument";
      private final String FIELD_NOT_VALID_ERROR = "A field sent was wrong";
      private final String EMAIL_ALREADY_EXISTS = "E-mail already exists.";
      private final String USERNAME_ALREADY_EXISTS = "Username already exists.";
@@ -84,6 +87,18 @@ public class GlobalExceptionManager {
                   .status(HttpStatus.BAD_REQUEST.value())
                   .error(FIELD_NOT_VALID_ERROR)
                   .message(collectedErrors)
+                  .build();
+
+          return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+     }
+
+     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+     public ResponseEntity handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+          ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                  .timestamp(LocalDateTime.now())
+                  .status(HttpStatus.BAD_REQUEST.value())
+                  .error(INVALID_ARGUMENT)
+                  .message(exception.getMessage())
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);

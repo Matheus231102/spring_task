@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface UserServiceInterface {
      UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException;
      List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException;
-     UserRDTO removeUserById(UUID id) throws UserNotFoundException;
+     void removeUserById(UUID id) throws UserNotFoundException;
      UserRDTO  getUserById(UUID id) throws UserNotFoundException;
      UserRDTO getUserByUsername(String username) throws UserNotFoundException;
      UserRDTO getUserByEmail(String username) throws UserNotFoundException;

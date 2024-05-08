@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import matheus.github.task.dto.taskdto.TaskDTO;
 import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
+import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.interfaces.TaskServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/task")
+@RequestMapping(PathConstants.DEFAULT_TASKS_PATH)
 public class TaskController {
 
      @Autowired
@@ -25,7 +26,7 @@ public class TaskController {
           return taskService.getTaskById(id);
      }
 
-     @GetMapping(path = "/all")
+     @GetMapping("/all")
      @ResponseStatus(HttpStatus.OK)
      public List<TaskRDTO> getAllTasks() {
           return taskService.getAllTasks();
@@ -37,7 +38,7 @@ public class TaskController {
           return taskService.insertTask(taskDTO);
      }
 
-     @PostMapping(path = "/group")
+     @PostMapping("/group")
      @ResponseStatus(HttpStatus.CREATED)
      public List<TaskRDTO> insertTasks(@RequestBody @Valid List<TaskDTO> taskDTOList) {
           return taskService.insertTasks(taskDTOList);

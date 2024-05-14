@@ -6,8 +6,10 @@ import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
+import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.implementation.ResourceManagerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/resource")
+@RequestMapping(PathConstants.DEFAULT_TASKS_RESOURCE)
 public class ResourceController {
 
      @Autowired
@@ -32,8 +34,9 @@ public class ResourceController {
      }
 
      @GetMapping(path = "/tasks")
-     public List<TaskRDTO> getTasksByUser() throws UserNotFoundException {
-          return resourceManager.getAllTasksByUsername(getAuthenticatedUsername());
+     public ResponseEntity<List<TaskRDTO>> getTasksByUser() throws UserNotFoundException {
+          List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksByUsername(getAuthenticatedUsername());
+          return ResponseEntity.ok(taskRDTOList);
      }
 
      @GetMapping(path = "/tasks/priority/{priority}")

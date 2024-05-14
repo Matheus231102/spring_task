@@ -1,9 +1,9 @@
 package matheus.github.task.jwt;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTCreationException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.*;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import matheus.github.task.entities.UserEntity;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
@@ -76,14 +76,21 @@ public class JwtService {
     }
 
     public DecodedJWT getDecodedToken(String token) {
-	   try {
-		  return JWT.require(getAlgorithm())
-				.withIssuer(JWT_ISSUER)
-				.build()
-				.verify(token);
-	   } catch (JWTVerificationException e) {
-		  throw new RuntimeException(e);
-	   }
+        Instant expiresAtAsInstant = null;
+        try {
+            return JWT.require(getAlgorithm())
+                    .withIssuer(JWT_ISSUER)
+                    .build()
+                    .verify(token);
+        } catch (AlgorithmMismatchException e) {
+		  throw new AlgorithmMismatchException("An error occurred while getting the algorithm: " + e.getMessage());
+		} catch (TokenExpiredException e) {
+            throw new TokenExpiredException("The token was expired at: ", e.getExpiredOn());
+        } catch (MissingClaimException e) {
+		  throw new RuntimeException("The claim has been forgotten: " + e.getMessage());
+		} catch (JWTVerificationException e) {
+            throw new RuntimeException("An error occurred while decoding token: " + e.getMessage());
+        }
     }
 
     private Algorithm getAlgorithm(){

@@ -32,9 +32,9 @@ public class SecurityConfig {
 			 requests -> requests
 				    .requestMatchers(PathConstants.REGISTER_URI_PATH).permitAll()
 				    .requestMatchers(PathConstants.LOGIN_URI_PATH).permitAll()
-				    .requestMatchers(PathConstants.ALL_RESOURCES_URI_PATH).hasAnyRole("ADMIN", "USER", "MANAGER")
-				    .requestMatchers(PathConstants.ALL_USERS_URI_PATH).hasAnyRole("ADMIN", "MANAGER")
-				    .requestMatchers(PathConstants.ALL_TASK_URI_PATH).hasAnyRole("ADMIN", "MANAGER")
+				    .requestMatchers(PathConstants.ALL_RESOURCES_URI_PATH).hasRole("USER")
+				    .requestMatchers(PathConstants.ALL_USERS_URI_PATH).hasRole("ADMIN")
+				    .requestMatchers(PathConstants.ALL_TASKS_URI_PATH).hasRole("ADMIN")
 				    .anyRequest().denyAll()
 			 )
 			 .addFilterBefore(validateJwtFilter, BasicAuthenticationFilter.class)

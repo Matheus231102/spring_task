@@ -30,7 +30,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationMan
 		  return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 	   }
 
-	   throw new BadCredentialsException("Bad credentials");
+	   throw new BadCredentialsException("You must enter valid credentials");
     }
 
 }

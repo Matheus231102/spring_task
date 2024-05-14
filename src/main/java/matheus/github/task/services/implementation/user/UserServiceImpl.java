@@ -8,7 +8,7 @@ import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.repositories.UserRepository;
-import matheus.github.task.services.implementation.validations.UserValidationService;
+import matheus.github.task.services.implementation.validations.UserRegisterValidationService;
 import matheus.github.task.services.interfaces.UserServiceInterface;
 import matheus.github.task.utils.EncodeUtils;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserServiceInterface {
      private UserMapper userMapper;
 
      @Autowired
-     private UserValidationService userValidation;
+     private UserRegisterValidationService userValidation;
 
      @Autowired
      private PasswordEncoder passwordEncoder;

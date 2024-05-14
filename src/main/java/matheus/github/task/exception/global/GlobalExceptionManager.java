@@ -1,5 +1,6 @@
 package matheus.github.task.exception.global;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import matheus.github.task.exception.ExceptionResponse;
 import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
@@ -7,6 +8,7 @@ import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,11 +20,15 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionManager {
-     private final String FIELD_NOT_VALID_ERROR = "A field sent was wrong";
+     private final String BAD_CREDENTIALS = "Bad credentials.";
+     private final String NO_HANDLER_FOUND = "No handler found.";
+     private final String FIELD_NOT_VALID = "A field sent was wrong.";
      private final String EMAIL_ALREADY_EXISTS = "E-mail already exists.";
      private final String USERNAME_ALREADY_EXISTS = "Username already exists.";
-     private final String TASK_NOT_FOUND_ERROR = "Task not found.";
-     private final String USER_NOT_FOUND_ERROR = "User not found.";
+     private final String TASK_NOT_FOUND = "Task not found.";
+     private final String USER_NOT_FOUND = "User not found.";
+     private final String EXPIRED_TOKEN = "Expired token.";
+
 
      @ExceptionHandler(UserNotFoundException.class)
      public ResponseEntity handleUserNotFoundException(UserNotFoundException exception) {
@@ -30,7 +36,7 @@ public class GlobalExceptionManager {
           ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.NOT_FOUND.value())
-                  .error(USER_NOT_FOUND_ERROR)
+                  .error(USER_NOT_FOUND)
                   .message(exception.getMessage())
                   .build();
           return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
@@ -42,7 +48,7 @@ public class GlobalExceptionManager {
           ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.NOT_FOUND.value())
-                  .error(TASK_NOT_FOUND_ERROR)
+                  .error(TASK_NOT_FOUND)
                   .message(exception.getMessage())
                   .build();
           return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
@@ -85,7 +91,7 @@ public class GlobalExceptionManager {
           ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.BAD_REQUEST.value())
-                  .error(FIELD_NOT_VALID_ERROR)
+                  .error(FIELD_NOT_VALID)
                   .message(collectedErrors)
                   .build();
 
@@ -109,11 +115,35 @@ public class GlobalExceptionManager {
           ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.BAD_REQUEST.value())
-                  .error(exception.getTitleMessageCode())
+                  .error(NO_HANDLER_FOUND)
                   .message(exception.getMessage())
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+     }
+
+     @ExceptionHandler(TokenExpiredException.class)
+     public ResponseEntity handleTokenExpiredException(TokenExpiredException exception) {
+          ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                  .timestamp(LocalDateTime.now())
+                  .status(HttpStatus.BAD_REQUEST.value())
+                  .error(EXPIRED_TOKEN + exception.getExpiredOn())
+                  .message(exception.getMessage())
+                  .build();
+
+          return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+     }
+
+     @ExceptionHandler(BadCredentialsException.class)
+     public ResponseEntity handleBadCredentialsException(BadCredentialsException exception) {
+          ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                  .timestamp(LocalDateTime.now())
+                  .status(HttpStatus.UNAUTHORIZED.value())
+                  .error(BAD_CREDENTIALS)
+                  .message(exception.getMessage())
+                  .build();
+
+          return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);
      }
 
 }

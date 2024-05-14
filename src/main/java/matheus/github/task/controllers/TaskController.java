@@ -20,7 +20,7 @@ public class TaskController {
 
      @Autowired
      private TaskServiceInterface taskService;
-
+     
      @GetMapping("/{taskid}")
      public ResponseEntity<TaskRDTO> getTaskById(@PathVariable(name = "taskid") UUID id) throws TaskNotFoundException {
           TaskRDTO taskRDTO = taskService.getTaskById(id);

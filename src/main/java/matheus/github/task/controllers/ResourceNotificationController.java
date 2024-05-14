@@ -5,6 +5,7 @@ import matheus.github.task.dto.messagedto.MessageDTO;
 import matheus.github.task.entities.NotificationEntity;
 import matheus.github.task.exception.exceptions.NullNotificationException;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
+import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.implementation.notification.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "/api/resource")
+@RequestMapping(PathConstants.DEFAULT_TASKS_RESOURCE)
 public class ResourceNotificationController {
 
     @Autowired

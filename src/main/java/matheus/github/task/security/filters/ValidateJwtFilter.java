@@ -59,6 +59,7 @@ public class ValidateJwtFilter extends OncePerRequestFilter {
     private String extractTokenFromRequest(HttpServletRequest request) throws InvalidAuthenticationHeaderException {
 	   String authorization = request.getHeader("Authorization");
 
+	   //TODO refatorar métodos de tratamento de exceção
 	   if (authorization == null) {
 		  throw new InvalidAuthenticationHeaderException("The authentication header is missing");
 	   }

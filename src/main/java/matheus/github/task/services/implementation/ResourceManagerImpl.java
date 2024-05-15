@@ -38,13 +38,13 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
           return taskService.getAllTasksByUserAndPriority(getUserEntity(username), enumTaskPriority);
      }
 
-     @Override
-     public List<TaskRDTO> deleteAllTasksByUsername(String username) throws UserNotFoundException {
-          return taskService.deleteAllTasksByUser(getUserEntity(username));
-     }
-
      public List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException {
           return taskService.insertTaskByUser(getUserEntity(username), taskDTO);
+     }
+
+     @Override
+     public List<TaskRDTO> insertTasksByUsername(String username, List<TaskDTO> taskDTOList) throws UserNotFoundException {
+          return taskService.insertTasksByUser(getUserEntity(username), taskDTOList);
      }
 
      public List<TaskRDTO> getAllTasksByUsernameAndTitleStartingWith(String username, String titleStartsWith) throws UserNotFoundException {
@@ -52,8 +52,13 @@ public class ResourceManagerImpl implements ResouceManagerInterface {
      }
 
      @Override
-     public List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException {
-          return taskService.deleteByUserAndTaskId(getUserEntity(username), taskId);
+     public void deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException {
+          taskService.deleteByUserAndTaskId(getUserEntity(username), taskId);
+     }
+
+     @Override
+     public void deleteAllTasksByUsername(String username) throws UserNotFoundException {
+          taskService.deleteAllTasksByUser(getUserEntity(username));
      }
 
      public UserRDTO getUserByUsername(String username) throws UserNotFoundException {

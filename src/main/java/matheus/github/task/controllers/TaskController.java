@@ -58,7 +58,7 @@ public class TaskController {
 
      @DeleteMapping("/{taskid}")
      public ResponseEntity deleteTaskById(@PathVariable(name = "taskid") UUID id) throws TaskNotFoundException {
-          taskService.removeTaskById(id);
+          taskService.deleteTaskById(id);
           return ResponseEntity
                   .status(HttpStatus.NO_CONTENT)
                   .build();

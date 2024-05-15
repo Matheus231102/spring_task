@@ -29,7 +29,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
      private TaskMapper taskMapper;
 
      @Override
-     @Transactional
      public TaskRDTO insertTask(TaskDTO taskDTO) {
           TaskEntity task = taskMapper.toEntity(taskDTO);
           task = taskRepository.save(task);
@@ -37,23 +36,12 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
-     @Transactional
      public List<TaskRDTO> insertTasks(List<TaskDTO> taskDTOList) {
           List<TaskEntity> taskEntityList = taskMapper.taskDTOListToEntity(taskDTOList);
           taskEntityList = taskRepository.saveAll(taskEntityList);
           return taskMapper.taskEntityListToRDTO(taskEntityList);
      }
 
-     @Override
-     @Transactional
-     public TaskRDTO removeTaskById(UUID id) throws TaskNotFoundException {
-          Optional<TaskEntity> task = taskRepository.findById(id);
-          if (task.isPresent()) {
-               taskRepository.delete(task.get());
-               return taskMapper.toRDTO(task.get());
-          }
-          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
-     }
 
      @Override
      public TaskRDTO getTaskById(UUID id) throws TaskNotFoundException {
@@ -67,16 +55,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
      @Override
      public List<TaskRDTO> getAllTasks() {
           return taskRepository.findAll()
-                  .stream()
-                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
-                  .toList();
-     }
-
-     @Override
-     @Transactional
-     public List<TaskRDTO> deleteAllTasksByUser(UserEntity userEntity) {
-          taskRepository.deleteAllByUser(userEntity);
-          return taskRepository.findByUser(userEntity)
                   .stream()
                   .map(taskEntity -> taskMapper.toRDTO(taskEntity))
                   .toList();
@@ -100,7 +78,6 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
-     @Transactional
      public List<TaskRDTO> insertTaskByUser(UserEntity userEntity, TaskDTO taskDTO) {
           TaskEntity taskEntity = taskMapper.toEntity(taskDTO);
           taskEntity.setUser(userEntity);
@@ -113,6 +90,17 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
+     public List<TaskRDTO> insertTasksByUser(UserEntity userEntity, List<TaskDTO> taskDTOList) {
+          List<TaskEntity> taskEntityList = taskDTOList.stream()
+                  .map(taskDTO -> taskMapper.toEntity(taskDTO))
+                  .peek(taskEntity -> taskEntity.setUser(userEntity))
+                  .toList();
+
+          taskEntityList = taskRepository.saveAll(taskEntityList);
+          return taskMapper.taskEntityListToRDTO(taskEntityList);
+     }
+
+     @Override
      public List<TaskRDTO> getAllTaskByUserAndTitleStartingWith(UserEntity userEntity, String startsWith) {
           return taskRepository.findByUserAndTitleStartingWith(userEntity, startsWith)
                   .stream()
@@ -121,13 +109,27 @@ public class TaskServiceImpl implements TaskServiceInterface {
      }
 
      @Override
-     @Transactional
-     public List<TaskRDTO> deleteByUserAndTaskId(UserEntity userEntity, UUID id) {
+     public void deleteByUserAndTaskId(UserEntity userEntity, UUID id) {
           taskRepository.deleteByUserAndId(userEntity, id);
-          return taskRepository.findByUser(userEntity)
-                  .stream()
-                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
-                  .collect(Collectors.toList());
      }
+
+     @Override
+     @Transactional
+     public void deleteAllTasksByUser(UserEntity userEntity) {
+          taskRepository.deleteAllByUser(userEntity);
+     }
+
+     @Override
+     public TaskRDTO deleteTaskById(UUID id) throws TaskNotFoundException {
+          Optional<TaskEntity> task = taskRepository.findById(id);
+          if (task.isPresent()) {
+               taskRepository.delete(task.get());
+               return taskMapper.toRDTO(task.get());
+          }
+          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
+     }
+
+
+
 }
 

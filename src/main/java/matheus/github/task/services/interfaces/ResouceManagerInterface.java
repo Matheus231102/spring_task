@@ -11,9 +11,12 @@ import java.util.UUID;
 
 public interface ResouceManagerInterface {
      List<TaskRDTO> getAllTasksByUsername(String username) throws UserNotFoundException;
-     List<TaskRDTO> deleteAllTasksByUsername(String username) throws UserNotFoundException;
      List<TaskRDTO> getAllTasksByUsernameAndPriority(String username, EnumTaskPriority enumTaskPriority) throws UserNotFoundException;
-     List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException;
      List<TaskRDTO> getAllTasksByUsernameAndTitleStartingWith(String username, String titleStartingWith) throws UserNotFoundException;
-     List<TaskRDTO> deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException, TaskNotFoundException;
+
+     void deleteAllTasksByUsername(String username) throws UserNotFoundException;
+     void deleteTaskByUsernameAndTaskId(String username, UUID taskId) throws UserNotFoundException, TaskNotFoundException;
+
+     List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException;
+     List<TaskRDTO> insertTasksByUsername(String username, List<TaskDTO> taskDTOList) throws UserNotFoundException;
 }

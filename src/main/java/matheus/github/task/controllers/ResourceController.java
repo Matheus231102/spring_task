@@ -7,9 +7,8 @@ import matheus.github.task.dto.userdto.UserRDTO;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.security.constants.PathConstants;
-import matheus.github.task.services.implementation.ResourceManagerImpl;
+import matheus.github.task.services.implementation.ResourceManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +23,7 @@ import java.util.UUID;
 public class ResourceController {
 
      @Autowired
-     private ResourceManagerImpl resourceManager;
+     private ResourceManager resourceManager;
 
      private String getAuthenticatedUsername() {
           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,16 +38,6 @@ public class ResourceController {
      public ResponseEntity<List<TaskRDTO>> getTasksByUser() throws UserNotFoundException {
           List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksByUsername(getAuthenticatedUsername());
           return ResponseEntity.ok(taskRDTOList);
-     }
-
-     @GetMapping(path = "/tasks/priority/{priority}")
-     public List<TaskRDTO> getTasksByUserAndPriority(@PathVariable(name = "priority") EnumTaskPriority priority) throws UserNotFoundException {
-          return resourceManager.getAllTasksByUsernameAndPriority(getAuthenticatedUsername(), priority);
-     }
-
-     @GetMapping(path = "/tasks/title_starting/{starts}")
-     public List<TaskRDTO> getTasksByUserAndTitleStartingWith(@PathVariable(name = "starts") String startsWith) throws UserNotFoundException {
-          return resourceManager.getAllTasksByUsernameAndTitleStartingWith(getAuthenticatedUsername() , startsWith);
      }
 
      @GetMapping(path = "/users")
@@ -72,14 +61,17 @@ public class ResourceController {
      @DeleteMapping(path = "/tasks")
      public ResponseEntity deleteTasksByUser() throws UserNotFoundException {
           resourceManager.deleteAllTasksByUsername(getAuthenticatedUsername());
-          return ResponseEntity.noContent().build();
+          return ResponseEntity
+                  .noContent()
+                  .build();
      }
 
      @DeleteMapping(path = "/task/{taskId}")
-     public ResponseEntity deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") UUID taskId)
-             throws UserNotFoundException {
+     public ResponseEntity deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") UUID taskId) throws UserNotFoundException {
           resourceManager.deleteTaskByUsernameAndTaskId(getAuthenticatedUsername(), taskId);
-          return ResponseEntity.noContent().build();
+          return ResponseEntity
+                  .noContent()
+                  .build();
      }
 
 }

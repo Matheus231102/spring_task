@@ -21,6 +21,8 @@ public class TaskRDTO {
      private String description;
      private EnumTaskStatus status;
      private EnumTaskPriority priority;
-     private LocalDateTime creationDate;
+     private LocalDateTime creationAt;
+     private LocalDateTime lastUpdateAt;
+     private LocalDateTime completionAt;
      private NotificationEntity taskNotification;
 }

@@ -24,14 +24,15 @@ public class TaskEntity {
      @EqualsAndHashCode.Include
      private UUID id;
 
-     @Column
      private String title;
 
-     @Column
      private String description;
 
-     @Column
-     private LocalDateTime creationDate;
+     private LocalDateTime creationAt;
+
+     private LocalDateTime lastUpdateAt;
+
+     private LocalDateTime completionAt;
 
      @Enumerated(EnumType.STRING)
      private EnumTaskStatus status;
@@ -48,7 +49,8 @@ public class TaskEntity {
 
      @PrePersist
      private void setUp() {
-          setCreationDate(LocalDateTime.now());
+          setCreationAt(LocalDateTime.now());
+          setLastUpdateAt(getCreationAt());
           setTaskNotification(NotificationEntity.create());
      }
 

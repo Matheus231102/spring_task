@@ -9,6 +9,8 @@ import lombok.Setter;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,4 +29,8 @@ public class TaskDTO {
 
      @NotNull(message = "priority name must not be null")
      private EnumTaskPriority priority;
+
+     @NotNull(message = "Completion date (completionAt) must no be null")
+     private LocalDateTime completionAt;
+
 }

@@ -8,13 +8,15 @@ import matheus.github.task.entities.UserEntity;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
 import matheus.github.task.repositories.task.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static matheus.github.task.repositories.spec.TaskSpecs.withUserEqual;
 
 @Service
 public class TaskServiceImpl {
@@ -26,12 +28,6 @@ public class TaskServiceImpl {
      @Autowired
      private TaskMapper taskMapper;
 
-     public TaskRDTO insertTask(TaskDTO taskDTO) {
-          TaskEntity task = taskMapper.toEntity(taskDTO);
-          task = taskRepository.save(task);
-          return taskMapper.toRDTO(task);
-     }
-
      public TaskRDTO getTaskById(UUID id) throws TaskNotFoundException {
           Optional<TaskEntity> task = taskRepository.findById(id);
           if (task.isPresent()) {
@@ -40,8 +36,9 @@ public class TaskServiceImpl {
           throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
-     public List<TaskRDTO> getAllTasks() {
-          return taskRepository.findAll()
+     public List<TaskRDTO> getAllTasksWithSpecification(UserEntity userEntity, Specification<TaskEntity> specification) {
+          specification = specification.and(withUserEqual(userEntity));
+          return taskRepository.findAll(specification)
                   .stream()
                   .map(taskEntity -> taskMapper.toRDTO(taskEntity))
                   .toList();
@@ -53,12 +50,6 @@ public class TaskServiceImpl {
                   .stream()
                   .map(taskEntity -> taskMapper.toRDTO(taskEntity))
                   .collect(Collectors.toList());
-     }
-
-     public List<TaskRDTO> getTasksByUserAndFilterDate(UserEntity userEntity, LocalDateTime minDate, LocalDateTime maxDate) {
-          return taskRepository.getTasksByConclusionDate(userEntity, minDate, maxDate).stream()
-                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
-                  .toList();
      }
 
      public List<TaskRDTO> insertTaskByUser(UserEntity userEntity, TaskDTO taskDTO) {
@@ -88,15 +79,6 @@ public class TaskServiceImpl {
 
      public void deleteAllTasksByUser(UserEntity userEntity) {
           taskRepository.deleteAllByUser(userEntity);
-     }
-
-     public TaskRDTO deleteTaskById(UUID id) throws TaskNotFoundException {
-          Optional<TaskEntity> task = taskRepository.findById(id);
-          if (task.isPresent()) {
-               taskRepository.delete(task.get());
-               return taskMapper.toRDTO(task.get());
-          }
-          throw new TaskNotFoundException(TASK_NOT_FOUND_BY_PROVIDED_ID + id);
      }
 
 }

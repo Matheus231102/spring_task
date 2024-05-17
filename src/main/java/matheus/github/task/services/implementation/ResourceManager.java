@@ -9,9 +9,9 @@ import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.services.implementation.task.TaskServiceImpl;
 import matheus.github.task.services.implementation.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,8 +31,8 @@ public class ResourceManager {
           return taskService.getAllTasksByUser(getUserEntity(username));
      }
 
-     public List<TaskRDTO> getTasksByUsernameAndConclusionDateFilter(String username, LocalDateTime minDate, LocalDateTime maxDate) throws UserNotFoundException {
-          return taskService.getTasksByUserAndFilterDate(getUserEntity(username), minDate, maxDate);
+     public List<TaskRDTO> getAllTasksSpecification(String username, Specification specification) throws UserNotFoundException {
+          return taskService.getAllTasksWithSpecification(getUserEntity(username), specification);
      }
 
      public List<TaskRDTO> insertTaskByUsername(String username, TaskDTO taskDTO) throws UserNotFoundException {

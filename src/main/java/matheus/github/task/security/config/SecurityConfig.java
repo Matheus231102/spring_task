@@ -1,5 +1,6 @@
 package matheus.github.task.security.config;
 
+import matheus.github.task.security.AuthenticationContext;
 import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.security.filters.ValidateJwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,10 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
 	   return new BCryptPasswordEncoder();
     }
+
+	@Bean
+	public AuthenticationContext authenticationContext() {
+		return new AuthenticationContext();
+	}
 
 }

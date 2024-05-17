@@ -28,11 +28,11 @@ public class TaskEntity {
 
      private String description;
 
-     private LocalDateTime creationAt;
+     private LocalDateTime creation;
 
-     private LocalDateTime lastUpdateAt;
+     private LocalDateTime lastUpdate;
 
-     private LocalDateTime completionAt;
+     private LocalDateTime conclusion;
 
      @Enumerated(EnumType.STRING)
      private EnumTaskStatus status;
@@ -49,8 +49,8 @@ public class TaskEntity {
 
      @PrePersist
      private void setUp() {
-          setCreationAt(LocalDateTime.now());
-          setLastUpdateAt(getCreationAt());
+          setCreation(LocalDateTime.now());
+          setLastUpdate(getCreation());
           setTaskNotification(NotificationEntity.create());
      }
 

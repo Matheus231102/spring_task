@@ -30,7 +30,7 @@ public class TaskDTO {
      @NotNull(message = "priority name must not be null")
      private EnumTaskPriority priority;
 
-     @NotNull(message = "Completion date (completionAt) must no be null")
-     private LocalDateTime completionAt;
+     @NotNull(message = "Conclusion date must no be null")
+     private LocalDateTime conclusion;
 
 }

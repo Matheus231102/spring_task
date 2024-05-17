@@ -1,18 +1,16 @@
 package matheus.github.task.services.implementation.task;
 
+import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.dto.taskdto.TaskDTO;
 import matheus.github.task.dto.taskdto.TaskRDTO;
-import matheus.github.task.dto.mappers.TaskMapper;
 import matheus.github.task.entities.TaskEntity;
 import matheus.github.task.entities.UserEntity;
-import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.TaskNotFoundException;
-import matheus.github.task.repositories.TaskRepository;
-import matheus.github.task.services.interfaces.TaskServiceInterface;
+import matheus.github.task.repositories.task.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -57,6 +55,12 @@ public class TaskServiceImpl {
                   .collect(Collectors.toList());
      }
 
+     public List<TaskRDTO> getTasksByUserAndFilterDate(UserEntity userEntity, LocalDateTime minDate, LocalDateTime maxDate) {
+          return taskRepository.getTasksByConclusionDate(userEntity, minDate, maxDate).stream()
+                  .map(taskEntity -> taskMapper.toRDTO(taskEntity))
+                  .toList();
+     }
+
      public List<TaskRDTO> insertTaskByUser(UserEntity userEntity, TaskDTO taskDTO) {
           TaskEntity taskEntity = taskMapper.toEntity(taskDTO);
           taskEntity.setUser(userEntity);
@@ -82,7 +86,6 @@ public class TaskServiceImpl {
           taskRepository.deleteByUserAndId(userEntity, id);
      }
 
-     @Transactional
      public void deleteAllTasksByUser(UserEntity userEntity) {
           taskRepository.deleteAllByUser(userEntity);
      }

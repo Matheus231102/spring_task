@@ -2,10 +2,7 @@ package matheus.github.task.exception.global;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import matheus.github.task.exception.ExceptionResponse;
-import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
-import matheus.github.task.exception.exceptions.TaskNotFoundException;
-import matheus.github.task.exception.exceptions.UserNotFoundException;
-import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
+import matheus.github.task.exception.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,10 +13,12 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionManager {
+     private final String BAD_DATETIME = "bad datetime sent";
      private final String BAD_CREDENTIALS = "Bad credentials.";
      private final String NO_HANDLER_FOUND = "No handler found.";
      private final String FIELD_NOT_VALID = "A field sent was wrong.";
@@ -144,6 +143,18 @@ public class GlobalExceptionManager {
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);
+     }
+
+     @ExceptionHandler(DateTimeParseException.class)
+     public ResponseEntity handleDateTimeParseException(DateTimeParseException exception) {
+          ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                  .timestamp(LocalDateTime.now())
+                  .status(HttpStatus.BAD_REQUEST.value())
+                  .error(BAD_DATETIME)
+                  .message(exception.getMessage())
+                  .build();
+
+          return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
      }
 
 }

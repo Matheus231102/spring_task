@@ -1,10 +1,10 @@
 package matheus.github.task.controllers;
 
 import jakarta.validation.Valid;
+import matheus.github.task.date.DateTaskUtils;
 import matheus.github.task.dto.taskdto.TaskDTO;
 import matheus.github.task.dto.taskdto.TaskRDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
-import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.exception.exceptions.UserNotFoundException;
 import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.implementation.ResourceManager;
@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +44,30 @@ public class ResourceController {
      @GetMapping(path = "/users")
      public UserRDTO getUserInfoByUser() throws UserNotFoundException {
           return resourceManager.getUserByUsername(getAuthenticatedUsername());
+     }
+
+     @GetMapping("/tasks/date")
+     public ResponseEntity<List<TaskRDTO>> getTasksByDate(@RequestParam("date1") String mindate,
+                                                          @RequestParam("date2") String maxdate) throws UserNotFoundException {
+          String authenticatedUsername = getAuthenticatedUsername();
+
+          LocalDateTime localDateTimeMin = DateTaskUtils.stringToLocalDateTime(mindate);
+          LocalDateTime localDateTimeMax = DateTaskUtils.stringToLocalDateTime(maxdate);
+
+          if (localDateTimeMin.isAfter(localDateTimeMax)) {
+               LocalDateTime localDateTime = localDateTimeMin;
+               localDateTimeMin = localDateTimeMax;
+               localDateTimeMax = localDateTime;
+          }
+
+          List<TaskRDTO> taskRDTOList = resourceManager.getTasksByUsernameAndConclusionDateFilter(
+                  authenticatedUsername,
+                  localDateTimeMin,
+                  localDateTimeMax);
+
+          return ResponseEntity
+                  .ok()
+                  .body(taskRDTOList);
      }
 
      @PostMapping(path = "/task")

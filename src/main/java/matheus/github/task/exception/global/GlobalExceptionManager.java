@@ -139,7 +139,7 @@ public class GlobalExceptionManager {
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.UNAUTHORIZED.value())
                   .error(BAD_CREDENTIALS)
-                  .message(exception.getMessage())
+                  .message("Invalid password exception")
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);

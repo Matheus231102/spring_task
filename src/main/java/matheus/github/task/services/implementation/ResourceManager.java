@@ -57,8 +57,7 @@ public class ResourceManager {
 
      private UserEntity getUserEntity(String username) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
-          UserEntity userEntity = userMapper.toEntity(userRDTO);
-          return userEntity;
+		  return userMapper.toEntity(userRDTO);
      }
 
 }

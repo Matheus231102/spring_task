@@ -22,7 +22,7 @@ public class LoginServiceImpl {
 	@Autowired
 	private JwtService jwtService;
 
-	public String loginUser(AuthDTO authDTO) throws UserNotFoundException {
+	public String getTokenByAuthentication(AuthDTO authDTO) throws UserNotFoundException {
 		if (!userRepository.existsByUsername(authDTO.getUsername())) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", authDTO.getUsername()));
 		}

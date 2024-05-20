@@ -3,6 +3,8 @@ package matheus.github.task.controllers;
 import jakarta.validation.Valid;
 import matheus.github.task.dto.userdto.UserDTO;
 import matheus.github.task.dto.userdto.UserRDTO;
+import matheus.github.task.exception.exceptions.EmailAlreadyExistsException;
+import matheus.github.task.exception.exceptions.UsernameAlreadyExistsException;
 import matheus.github.task.security.constants.PathConstants;
 import matheus.github.task.services.implementation.register.RegisterServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
         private RegisterServiceImpl registerService;
 
         @PostMapping
-        public UserRDTO registerUser(@RequestBody @Valid UserDTO userDTO) {
+        public UserRDTO registerUser(@RequestBody @Valid UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
             return registerService.registerUser(userDTO);
         }
     }

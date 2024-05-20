@@ -19,14 +19,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionManager {
      private final String BAD_DATETIME = "bad datetime sent";
-     private final String BAD_CREDENTIALS = "Bad credentials.";
-     private final String NO_HANDLER_FOUND = "No handler found.";
-     private final String FIELD_NOT_VALID = "A field sent was wrong.";
-     private final String EMAIL_ALREADY_EXISTS = "E-mail already exists.";
-     private final String USERNAME_ALREADY_EXISTS = "Username already exists.";
-     private final String TASK_NOT_FOUND = "Task not found.";
-     private final String USER_NOT_FOUND = "User not found.";
-     private final String EXPIRED_TOKEN = "Expired token.";
+     private final String BAD_CREDENTIALS = "Bad credentials";
+     private final String NO_HANDLER_FOUND = "No handler found";
+     private final String FIELD_NOT_VALID = "A field sent was wrong";
+     private final String EMAIL_ALREADY_EXISTS = "E-mail already exists";
+     private final String USERNAME_ALREADY_EXISTS = "Username already exists";
+     private final String TASK_NOT_FOUND = "Task not found";
+     private final String USER_NOT_FOUND = "User not found";
+     private final String EXPIRED_TOKEN = "Expired token";
 
 
      @ExceptionHandler(UserNotFoundException.class)
@@ -139,7 +139,7 @@ public class GlobalExceptionManager {
                   .timestamp(LocalDateTime.now())
                   .status(HttpStatus.UNAUTHORIZED.value())
                   .error(BAD_CREDENTIALS)
-                  .message("Invalid password exception")
+                  .message("Invalid password")
                   .build();
 
           return new ResponseEntity(exceptionResponse, HttpStatus.UNAUTHORIZED);

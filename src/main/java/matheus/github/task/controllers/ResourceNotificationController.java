@@ -19,16 +19,16 @@ public class ResourceNotificationController {
     @Autowired
     private NotificationServiceImpl notificationService;
 
-    @GetMapping(path = "/notification/{taskId}")
-    public NotificationEntity getNotificationByTaskId(@PathVariable(name = "taskId") UUID taskId) throws TaskNotFoundException, NullNotificationException {
-	   return notificationService.getNotificationByTaskId(taskId);
+    @GetMapping(path = "/notification/{taskid}")
+    public NotificationEntity getNotificationByTaskId(@PathVariable UUID taskid) throws TaskNotFoundException, NullNotificationException {
+	   return notificationService.getNotificationByTaskId(taskid);
     }
 
-    @PostMapping(path = "/notification/{taskId}")
+    @PostMapping(path = "/notification/{taskid}")
     public NotificationEntity insertMessageInNotificationByTaskId(
-		  @PathVariable(name = "taskId") UUID taskId,
+		  @PathVariable UUID taskid,
 		  @RequestBody @Valid MessageDTO messageDTO ) throws TaskNotFoundException, NullNotificationException {
-	   return notificationService.addMessageByTaskId(messageDTO, taskId);
+	   return notificationService.addMessageByTaskId(messageDTO, taskid);
     }
 
 }

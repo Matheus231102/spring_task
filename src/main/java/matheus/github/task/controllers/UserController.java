@@ -24,20 +24,20 @@ public class UserController {
      private UserServiceInterface userService;
 
      @GetMapping("/{userid}")
-     public ResponseEntity<UserRDTO> getUserById(@PathVariable(name = "userid") UUID id) throws UserNotFoundException {
-          UserRDTO userRDTO = userService.getUserById(id);
+     public ResponseEntity<UserRDTO> getUserById(@PathVariable UUID userid) throws UserNotFoundException {
+          UserRDTO userRDTO = userService.getUserById(userid);
           return ResponseEntity.ok(userRDTO);
      }
 
      //TODO verificar o por que do retorno de 401 em path errados
      @GetMapping("/username/{username}")
-     public ResponseEntity<UserRDTO> getUserByUsername(@PathVariable(name = "username") String username) throws UserNotFoundException {
+     public ResponseEntity<UserRDTO> getUserByUsername(@PathVariable String username) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByUsername(username);
           return ResponseEntity.ok(userRDTO);
      }
 
      @GetMapping("/email/{email}")
-     public ResponseEntity<UserRDTO> getUserByEmail(@PathVariable(name = "email") String email) throws UserNotFoundException {
+     public ResponseEntity<UserRDTO> getUserByEmail(@PathVariable String email) throws UserNotFoundException {
           UserRDTO userRDTO = userService.getUserByEmail(email);
           return ResponseEntity.ok(userRDTO);
      }
@@ -56,15 +56,15 @@ public class UserController {
      }
 
      @DeleteMapping("/{userid}")
-     public ResponseEntity removeUserById(@RequestParam(name = "userid") UUID id) throws UserNotFoundException {
-          userService.removeUserById(id);
+     public ResponseEntity removeUserById(@RequestParam UUID userid) throws UserNotFoundException {
+          userService.removeUserById(userid);
           return ResponseEntity.noContent().build();
      }
 
      @PutMapping("/{userid}")
-     private ResponseEntity<UserRDTO> updateUserById(@PathVariable(name = "userid") UUID id,
+     private ResponseEntity<UserRDTO> updateUserById(@PathVariable UUID userid,
                                                      @RequestBody @Valid UserDTO userDTO) throws UserNotFoundException, UsernameAlreadyExistsException, EmailAlreadyExistsException {
-          UserRDTO userRDTO = userService.updateUserById(id, userDTO);
+          UserRDTO userRDTO = userService.updateUserById(userid, userDTO);
           return ResponseEntity.ok(userRDTO);
      }
 

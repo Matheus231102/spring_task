@@ -32,18 +32,18 @@ public class ResouceDateFilterController {
 	private AuthenticationContext authenticationContext;
 
 	@GetMapping("/tasks/conclusion/between")
-	public ResponseEntity<List<TaskRDTO>> getTasksByDate(@RequestParam("date1") LocalDateTime mindate,
-														 @RequestParam("date2") LocalDateTime maxdate) throws UserNotFoundException {
+	public ResponseEntity<List<TaskRDTO>> getTasksByDate(@RequestParam LocalDateTime date1,
+														 @RequestParam LocalDateTime date2) throws UserNotFoundException {
 		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 
-		if (mindate.isAfter(maxdate)) {
-			LocalDateTime temp = mindate;
-			mindate = maxdate;
-			maxdate = temp;
+		if (date1.isAfter(date2)) {
+			LocalDateTime temp = date1;
+			date1 = date2;
+			date2 = temp;
 		}
 
-		Specification<TaskEntity> specification = withConclusionDateUnderOrEqual(maxdate)
-				.and(withConclusionDateOverOrEqual(mindate));
+		Specification<TaskEntity> specification = withConclusionDateUnderOrEqual(date2)
+				.and(withConclusionDateOverOrEqual(date1));
 
 		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(
 				authenticatedUsername, specification);

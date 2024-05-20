@@ -23,7 +23,6 @@ public class LoginServiceImpl {
 	private JwtService jwtService;
 
 	public String loginUser(AuthDTO authDTO) throws UserNotFoundException {
-		//TODO caso a senha esteja incorreta está retornando -> "message": "Usuário inexistente ou senha inválida" o que está errado
 		if (!userRepository.existsByUsername(authDTO.getUsername())) {
 			throw new UserNotFoundException(String.format("User not found by provided username: %s", authDTO.getUsername()));
 		}
@@ -32,7 +31,6 @@ public class LoginServiceImpl {
 				new UsernamePasswordAuthenticationToken(authDTO.getUsername(), authDTO.getPassword())
 		);
 
-		//TODO verificar se usuário existe ou senha está incorreta
 		return jwtService.getToken(authenticated.getName());
 	}
 }

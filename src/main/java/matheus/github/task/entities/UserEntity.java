@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import matheus.github.task.enums.EnumRole;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -42,7 +43,8 @@ public class UserEntity implements UserDetails {
      @Column
      private String password;
 
-     @Column
+     @CreationTimestamp
+     @Column(columnDefinition = "datetime")
      private LocalDateTime creationDate;
 
      @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -54,7 +56,6 @@ public class UserEntity implements UserDetails {
 
      @PrePersist
      public void setUp() {
-          setCreationDate(LocalDateTime.now());
           setRole(EnumRole.USER);
           setTasks(new ArrayList<>());
      }

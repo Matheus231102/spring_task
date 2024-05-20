@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import matheus.github.task.enums.EnumTaskPriority;
 import matheus.github.task.enums.EnumTaskStatus;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,8 +30,12 @@ public class TaskEntity {
 
      private String description;
 
+     @CreationTimestamp
+     @Column(nullable = false, columnDefinition = "datetime")
      private LocalDateTime creation;
 
+     @UpdateTimestamp
+     @Column(nullable = false, columnDefinition = "datetime")
      private LocalDateTime lastUpdate;
 
      private LocalDateTime conclusion;
@@ -49,8 +55,6 @@ public class TaskEntity {
 
      @PrePersist
      private void setUp() {
-          setCreation(LocalDateTime.now());
-          setLastUpdate(getCreation());
           setTaskNotification(NotificationEntity.create());
      }
 

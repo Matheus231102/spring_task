@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(PathConstants.DEFAULT_TASKS_RESOURCE)
-public class ResourceController {
+public class ResourceController extends AuthenticationContext {
 
      @Autowired
      private ResourceManager resourceManager;
@@ -28,16 +28,14 @@ public class ResourceController {
 
      @GetMapping(path = "/tasks")
      public ResponseEntity<List<TaskRDTO>> getTasksByUser() throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksByUsername(authenticatedUsername);
+          List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksByUsername(getAuthenticatedUsername());
           return ResponseEntity
                   .ok(taskRDTOList);
      }
 
      @GetMapping(path = "/users")
      public ResponseEntity<UserRDTO> getUserInfoByUser() throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          UserRDTO userRDTO = resourceManager.getUserByUsername(authenticatedUsername);
+          UserRDTO userRDTO = resourceManager.getUserByUsername(getAuthenticatedUsername());
           return ResponseEntity
                   .ok()
                   .body(userRDTO);
@@ -45,8 +43,7 @@ public class ResourceController {
 
      @PostMapping(path = "/task")
      public ResponseEntity<List<TaskRDTO>> insertTaskByUser(@RequestBody @Valid TaskDTO taskDTO) throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          List<TaskRDTO> taskRDTOList = resourceManager.insertTaskByUsername(authenticatedUsername, taskDTO);
+          List<TaskRDTO> taskRDTOList = resourceManager.insertTaskByUsername(getAuthenticatedUsername(), taskDTO);
           return ResponseEntity
                   .ok()
                   .body(taskRDTOList);
@@ -54,8 +51,7 @@ public class ResourceController {
 
      @PostMapping(path = "/tasks")
      public ResponseEntity<List<TaskRDTO>> insertTasksByUser(@RequestBody @Valid List<TaskDTO> taskDTOList) throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          List<TaskRDTO> taskRDTOList = resourceManager.insertTasksByUsername(authenticatedUsername, taskDTOList);
+          List<TaskRDTO> taskRDTOList = resourceManager.insertTasksByUsername(getAuthenticatedUsername(), taskDTOList);
           return ResponseEntity
                   .status(HttpStatus.CREATED)
                   .body(taskRDTOList);
@@ -63,8 +59,7 @@ public class ResourceController {
 
      @DeleteMapping(path = "/tasks")
      public ResponseEntity deleteTasksByUser() throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          resourceManager.deleteAllTasksByUsername(authenticatedUsername);
+          resourceManager.deleteAllTasksByUsername(getAuthenticatedUsername());
           return ResponseEntity
                   .noContent()
                   .build();
@@ -72,8 +67,7 @@ public class ResourceController {
 
      @DeleteMapping(path = "/task/{taskId}")
      public ResponseEntity deleteTaskByUserAndTaskId(@PathVariable(name = "taskId") UUID taskId) throws UserNotFoundException {
-          String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-          resourceManager.deleteTaskByUsernameAndTaskId(authenticatedUsername, taskId);
+          resourceManager.deleteTaskByUsernameAndTaskId(getAuthenticatedUsername(), taskId);
           return ResponseEntity
                   .noContent()
                   .build();

@@ -23,19 +23,14 @@ import static matheus.github.task.utils.TaskUtils.sorted;
 
 @RestController
 @RequestMapping(PathConstants.DEFAULT_TASKS_RESOURCE)
-public class ResouceDateFilterController {
+public class ResouceDateFilterController extends AuthenticationContext {
 
 	@Autowired
 	private ResourceManager resourceManager;
 
-	@Autowired
-	private AuthenticationContext authenticationContext;
-
 	@GetMapping("/tasks/conclusion/between")
 	public ResponseEntity<List<TaskRDTO>> getTasksByDate(@RequestParam LocalDateTime date1,
 														 @RequestParam LocalDateTime date2) throws UserNotFoundException {
-		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
-
 		if (date1.isAfter(date2)) {
 			LocalDateTime temp = date1;
 			date1 = date2;
@@ -46,7 +41,7 @@ public class ResouceDateFilterController {
 				.and(withConclusionDateOverOrEqual(date1));
 
 		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(
-				authenticatedUsername, specification);
+				getAuthenticatedUsername(), specification);
 
 		return ResponseEntity
 				.ok()
@@ -55,10 +50,8 @@ public class ResouceDateFilterController {
 
 	@GetMapping("/tasks/conclusion/underOrEqual")
 	public ResponseEntity<List<TaskRDTO>> getTasksByDateUnderOrEqual(@RequestParam LocalDateTime date) throws UserNotFoundException {
-		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		Specification<TaskEntity> specification = withConclusionDateUnderOrEqual(date);
-
-		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(authenticatedUsername, specification);
+		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(getAuthenticatedUsername(), specification);
 		return ResponseEntity
 				.ok()
 				.body(sorted(taskRDTOList));
@@ -67,10 +60,9 @@ public class ResouceDateFilterController {
 	@GetMapping("/tasks/conclusion/overOrEqual")
 	public ResponseEntity<List<TaskRDTO>> getTasksByDateOverOrEqual(
 			@RequestParam LocalDateTime date) throws UserNotFoundException {
-		String authenticatedUsername = authenticationContext.getAuthenticatedUsername();
 		Specification<TaskEntity> specification = withConclusionDateOverOrEqual(date);
 
-		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(authenticatedUsername, specification);
+		List<TaskRDTO> taskRDTOList = resourceManager.getAllTasksSpecification(getAuthenticatedUsername(), specification);
 		return ResponseEntity
 				.ok()
 				.body(sorted(taskRDTOList));

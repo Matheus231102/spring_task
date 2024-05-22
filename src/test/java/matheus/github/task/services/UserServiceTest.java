@@ -57,4 +57,31 @@ public class UserServiceTest {
 
 		assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
 	}
+
+	@Test
+	void testRemoveUserById() {
+		UUID userId = UUID.randomUUID();
+		UserEntity userEntity = new UserEntity();
+
+		when(userRepository.findById(userId))
+					.thenReturn(Optional.of(userEntity));
+
+		assertDoesNotThrow(() -> {
+			userService.removeUserById(userId);
+		});
+	}
+
+	@Test
+	void testRemoveUserById_userNotExists() {
+		UUID userId = UUID.randomUUID();
+
+		when(userRepository.findById(userId))
+				.thenReturn(Optional.empty());
+
+		assertThrows(UserNotFoundException.class, () -> {
+			userService.removeUserById(userId);
+		});
+	}
+
+
 }

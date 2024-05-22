@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserServiceInterface {
      private EncodeUtils encodeUtils;
 
      @Override
-     @Transactional
      public UserRDTO insertUser(UserDTO userDTO) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           userValidation.validateUsername(userDTO.getUsername());
           userValidation.validateEmail(userDTO.getEmail());
@@ -53,7 +52,6 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     @Transactional
      public void removeUserById(UUID id) throws UserNotFoundException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
@@ -98,7 +96,6 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     @Transactional
      public List<UserRDTO> insertUsers(List<UserDTO> userDTOList) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
           for (UserDTO userDTO : userDTOList) {
                userValidation.validateEmail(userDTO.getEmail());
@@ -113,7 +110,6 @@ public class UserServiceImpl implements UserServiceInterface {
      }
 
      @Override
-     @Transactional
      public UserRDTO updateUserById(UUID id, UserDTO userDTO) throws UserNotFoundException, EmailAlreadyExistsException, UsernameAlreadyExistsException {
           Optional<UserEntity> user = userRepository.findById(id);
           if (user.isPresent()) {
